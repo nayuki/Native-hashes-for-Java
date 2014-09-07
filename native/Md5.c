@@ -2,7 +2,7 @@
 #include <jni.h>
 
 
-static void compressBlock(const jbyte *block, uint32_t state[4]);
+static void Md5_compressBlock(const jbyte *block, uint32_t state[4]);
 
 
 /*
@@ -29,7 +29,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Md5_compress(JNIEnv *env, jcla
 	size_t newoff;
 	size_t newlen = len;
 	for (newoff = 0; newoff < newlen; newoff += 64)
-		compressBlock(block + off + newoff, state);
+		Md5_compressBlock(block + off + newoff, state);
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	
 	// Convert state array to jint and clean up
@@ -40,7 +40,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Md5_compress(JNIEnv *env, jcla
 }
 
 
-static void compressBlock(const jbyte *block, uint32_t state[4]) {
+static void Md5_compressBlock(const jbyte *block, uint32_t state[4]) {
 	#define LOADSCHEDULE(i)  \
 		schedule[i] =                                    \
 			  (uint32_t)(uint8_t)block[i * 4 + 0]        \
