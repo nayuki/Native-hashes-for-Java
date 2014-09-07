@@ -33,15 +33,14 @@ abstract class HashTest {
 		}
 		
 		// Randomized test
-		Random r = new Random();
 		for (int i = 0; i < 1000; i++) {
-			int len = r.nextInt(10000);
+			int len = random.nextInt(10000);
 			BlockHasher h0 = newHasher(false);
 			BlockHasher h1 = newHasher(true);
 			while (len > 0) {
-				int n = r.nextInt(len) + 1;
+				int n = random.nextInt(len) + 1;
 				byte[] b = new byte[n];
-				r.nextBytes(b);
+				random.nextBytes(b);
 				h0.update(b);
 				h1.update(b);
 				len -= n;
@@ -54,7 +53,7 @@ abstract class HashTest {
 	
 	public void benchmark() {
 		byte[] b = new byte[1 << 27];  // 128 MiB
-		new Random().nextBytes(b);
+		random.nextBytes(b);
 		
 		BlockHasher hashJava = newHasher(false);
 		BlockHasher hashNative = newHasher(true);
