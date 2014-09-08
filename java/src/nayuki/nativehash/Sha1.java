@@ -45,7 +45,7 @@ public class Sha1 extends BlockHasher {
 	
 	
 	static {
-		System.loadLibrary("Sha1");
+		System.loadLibrary("nayuki-native-hashes");
 	}
 	
 }

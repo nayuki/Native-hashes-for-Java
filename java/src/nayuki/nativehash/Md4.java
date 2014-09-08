@@ -45,7 +45,7 @@ public class Md4 extends BlockHasher {
 	
 	
 	static {
-		System.loadLibrary("Md4");
+		System.loadLibrary("nayuki-native-hashes");
 	}
 	
 }

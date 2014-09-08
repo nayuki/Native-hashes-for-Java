@@ -45,7 +45,7 @@ public class Sha256 extends BlockHasher {
 	
 	
 	static {
-		System.loadLibrary("Sha256");
+		System.loadLibrary("nayuki-native-hashes");
 	}
 	
 }

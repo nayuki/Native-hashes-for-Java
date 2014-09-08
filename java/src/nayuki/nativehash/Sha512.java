@@ -45,7 +45,7 @@ public class Sha512 extends BlockHasher {
 	
 	
 	static {
-		System.loadLibrary("Sha512");
+		System.loadLibrary("nayuki-native-hashes");
 	}
 	
 }
