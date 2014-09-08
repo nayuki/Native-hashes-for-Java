@@ -52,18 +52,12 @@ abstract class HashTest {
 	
 	
 	public void benchmark() {
-		byte[] b = new byte[1 << 27];  // 128 MiB
-		random.nextBytes(b);
-		
 		BlockHasher hashJava = newHasher(false);
 		BlockHasher hashNative = newHasher(true);
-		
-		// Warm up the JIT
-		for (int i = 16; i <= 24; i++)
-			hashJava.update(b, 0, 1 << i);
-		
+		byte[] b = new byte[1 << 27];  // 128 MiB
 		System.out.println("Block size    Java impl    Native impl");
 		while (true) {
+			random.nextBytes(b);
 			for (int i = 12; i <= 27; i++) {
 				int len = 1 << i;
 				long startTime;
