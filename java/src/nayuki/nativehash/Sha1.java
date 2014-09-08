@@ -8,6 +8,7 @@ public class Sha1 extends BlockHasher {
 	protected int[] state;
 	
 	
+	
 	public Sha1() {
 		super(64);
 		state = new int[]{0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0};
