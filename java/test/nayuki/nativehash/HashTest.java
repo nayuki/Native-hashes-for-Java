@@ -27,6 +27,7 @@ abstract class HashTest {
 			String message = testCase[1];
 			String expectHash = testCase[0];
 			if (!toHex(getHash(message, false)).equals(expectHash)) {
+				System.out.println(toHex(getHash(message, false)));
 				String errorMsg = String.format("Self-check failed: %s(%s) != %s", newHasher(false).getClass().getName(), message, expectHash);
 				throw new AssertionError(errorMsg);
 			}
