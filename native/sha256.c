@@ -2,7 +2,7 @@
 #include <jni.h>
 
 
-static void Sha256_compressBlock(const jbyte *block, uint32_t state[8]);
+static void sha256_compress_block(const jbyte *block, uint32_t state[8]);
 
 
 /*
@@ -29,7 +29,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Sha256_compress(JNIEnv *env, j
 	size_t newoff;
 	size_t newlen = len;
 	for (newoff = 0; newoff < newlen; newoff += 64)
-		Sha256_compressBlock(block + off + newoff, state);
+		sha256_compress_block(block + off + newoff, state);
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	
 	// Convert state array to jint and clean up
@@ -40,7 +40,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Sha256_compress(JNIEnv *env, j
 }
 
 
-static void Sha256_compressBlock(const jbyte *block, uint32_t state[8]) {
+static void sha256_compress_block(const jbyte *block, uint32_t state[8]) {
 	// 32-bit right rotation
 	#define ROR(x, i)  \
 		(((x) << (32 - (i))) | ((x) >> (i)))

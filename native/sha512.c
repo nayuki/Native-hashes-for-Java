@@ -2,7 +2,7 @@
 #include <jni.h>
 
 
-static void Sha512_compressBlock(const jbyte *block, uint64_t state[8]);
+static void sha512_compress_block(const jbyte *block, uint64_t state[8]);
 
 
 /*
@@ -29,7 +29,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Sha512_compress(JNIEnv *env, j
 	size_t newoff;
 	size_t newlen = len;
 	for (newoff = 0; newoff < newlen; newoff += 128)
-		Sha512_compressBlock(block + off + newoff, state);
+		sha512_compress_block(block + off + newoff, state);
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	
 	// Convert state array to jlong and clean up
@@ -40,7 +40,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Sha512_compress(JNIEnv *env, j
 }
 
 
-static void Sha512_compressBlock(const jbyte *block, uint64_t state[8]) {
+static void sha512_compress_block(const jbyte *block, uint64_t state[8]) {
 	// 64-bit right rotation
 	#define ROR(x, i)  \
 		(((x) << (64 - (i))) | ((x) >> (i)))
