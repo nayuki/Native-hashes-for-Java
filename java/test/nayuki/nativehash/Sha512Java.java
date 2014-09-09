@@ -21,7 +21,7 @@ final class Sha512Java extends Sha512 {
 			}
 			
 			for (int j = 16; j < 80; j++)
-				sch[j] = sch[j-16] + sch[j-7] + smallSigma0(sch[j-15]) + smallSigma1(sch[j-2]);
+				sch[j] = sch[j - 16] + sch[j - 7] + smallSigma0(sch[j - 15]) + smallSigma1(sch[j - 2]);
 			
 			long a = state[0];
 			long b = state[1];
