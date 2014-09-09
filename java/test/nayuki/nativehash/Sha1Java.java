@@ -3,12 +3,6 @@ package nayuki.nativehash;
 
 final class Sha1Java extends Sha1 {
 	
-	private static final int K0 = 0x5A827999;
-	private static final int K1 = 0x6ED9EBA1;
-	private static final int K2 = 0x8F1BBCDC;
-	private static final int K3 = 0xCA62C1D6;
-	
-	
 	protected void compress(byte[] msg, int off, int len) {
 		int a = state[0];
 		int b = state[1];
@@ -123,5 +117,11 @@ final class Sha1Java extends Sha1 {
 			e = state[4] += e;
 		}
 	}
+	
+	
+	private static final int K0 = 0x5A827999;
+	private static final int K1 = 0x6ED9EBA1;
+	private static final int K2 = 0x8F1BBCDC;
+	private static final int K3 = 0xCA62C1D6;
 	
 }
