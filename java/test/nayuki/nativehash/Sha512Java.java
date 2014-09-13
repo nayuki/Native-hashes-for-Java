@@ -3,7 +3,7 @@ package nayuki.nativehash;
 import static java.lang.Long.rotateRight;
 
 
-final class Sha512Java extends Sha512 {
+class Sha512Java extends Sha512 {
 	
 	protected void compress(byte[] msg, int off, int len) {
 		long[] sch = new long[80];
