@@ -1,7 +1,7 @@
 package nayuki.nativehash;
 
 
-final class TigerJava extends Tiger {
+class TigerJava extends Tiger {
 	
 	protected void compress(byte[] msg, int off, int len) {
 		long[] sch = new long[8];

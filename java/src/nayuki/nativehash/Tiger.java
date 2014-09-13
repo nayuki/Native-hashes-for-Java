@@ -6,12 +6,14 @@ import java.util.Arrays;
 public class Tiger extends BlockHasher {
 	
 	protected long[] state;
+	protected byte padding;
 	
 	
 	
 	public Tiger() {
 		super(64);
 		state = new long[]{0x0123456789ABCDEFL, 0xFEDCBA9876543210L, 0xF096A5B4C3B2E187L};
+		padding = 0x01;
 	}
 	
 	
@@ -23,7 +25,7 @@ public class Tiger extends BlockHasher {
 	
 	
 	protected byte[] getHashDestructively() {
-		block[blockFilled] = (byte)0x01;
+		block[blockFilled] = padding;
 		blockFilled++;
 		Arrays.fill(block, blockFilled, block.length, (byte)0);
 		if (blockFilled + 8 > block.length) {
