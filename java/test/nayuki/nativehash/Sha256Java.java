@@ -3,7 +3,7 @@ package nayuki.nativehash;
 import static java.lang.Integer.rotateRight;
 
 
-final class Sha256Java extends Sha256 {
+class Sha256Java extends Sha256 {
 	
 	protected void compress(byte[] msg, int off, int len) {
 		int a = state[0];
