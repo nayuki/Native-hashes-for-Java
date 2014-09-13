@@ -3,13 +3,13 @@ package nayuki.nativehash;
 import java.util.Arrays;
 
 
-public class Tiger2 extends BlockHasher {
+public class Tiger extends BlockHasher {
 	
 	protected long[] state;
 	
 	
 	
-	public Tiger2() {
+	public Tiger() {
 		super(64);
 		state = new long[]{0x0123456789ABCDEFL, 0xFEDCBA9876543210L, 0xF096A5B4C3B2E187L};
 	}
@@ -23,7 +23,7 @@ public class Tiger2 extends BlockHasher {
 	
 	
 	protected byte[] getHashDestructively() {
-		block[blockFilled] = (byte)0x80;
+		block[blockFilled] = (byte)0x01;
 		blockFilled++;
 		Arrays.fill(block, blockFilled, block.length, (byte)0);
 		if (blockFilled + 8 > block.length) {
