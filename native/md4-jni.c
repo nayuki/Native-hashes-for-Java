@@ -38,5 +38,3 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Md4_compress(JNIEnv *env, jcla
 	theEnv->ReleaseIntArrayElements(env, stateArray, stateJava, 0);
 	return 1;
 }
-
-
