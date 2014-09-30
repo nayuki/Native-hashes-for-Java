@@ -4,75 +4,42 @@ package nayuki.nativehash;
 final class Md2Java extends Md2 {
 	
 	protected void compress(byte[] msg, int off, int len) {
-		int st00 = state[ 0] & 0xFF, st01 = state[ 1] & 0xFF, st02 = state[ 2] & 0xFF, st03 = state[ 3] & 0xFF;
-		int st04 = state[ 4] & 0xFF, st05 = state[ 5] & 0xFF, st06 = state[ 6] & 0xFF, st07 = state[ 7] & 0xFF;
-		int st08 = state[ 8] & 0xFF, st09 = state[ 9] & 0xFF, st10 = state[10] & 0xFF, st11 = state[11] & 0xFF;
-		int st12 = state[12] & 0xFF, st13 = state[13] & 0xFF, st14 = state[14] & 0xFF, st15 = state[15] & 0xFF;
-		int st16 = state[16] & 0xFF, st17 = state[17] & 0xFF, st18 = state[18] & 0xFF, st19 = state[19] & 0xFF;
-		int st20 = state[20] & 0xFF, st21 = state[21] & 0xFF, st22 = state[22] & 0xFF, st23 = state[23] & 0xFF;
-		int st24 = state[24] & 0xFF, st25 = state[25] & 0xFF, st26 = state[26] & 0xFF, st27 = state[27] & 0xFF;
-		int st28 = state[28] & 0xFF, st29 = state[29] & 0xFF, st30 = state[30] & 0xFF, st31 = state[31] & 0xFF;
-		int st32 = state[32] & 0xFF, st33 = state[33] & 0xFF, st34 = state[34] & 0xFF, st35 = state[35] & 0xFF;
-		int st36 = state[36] & 0xFF, st37 = state[37] & 0xFF, st38 = state[38] & 0xFF, st39 = state[39] & 0xFF;
-		int st40 = state[40] & 0xFF, st41 = state[41] & 0xFF, st42 = state[42] & 0xFF, st43 = state[43] & 0xFF;
-		int st44 = state[44] & 0xFF, st45 = state[45] & 0xFF, st46 = state[46] & 0xFF, st47 = state[47] & 0xFF;
-		int chk00 = checksum[ 0] & 0xFF, chk01 = checksum[ 1] & 0xFF, chk02 = checksum[ 2] & 0xFF, chk03 = checksum[ 3] & 0xFF;
-		int chk04 = checksum[ 4] & 0xFF, chk05 = checksum[ 5] & 0xFF, chk06 = checksum[ 6] & 0xFF, chk07 = checksum[ 7] & 0xFF;
-		int chk08 = checksum[ 8] & 0xFF, chk09 = checksum[ 9] & 0xFF, chk10 = checksum[10] & 0xFF, chk11 = checksum[11] & 0xFF;
-		int chk12 = checksum[12] & 0xFF, chk13 = checksum[13] & 0xFF, chk14 = checksum[14] & 0xFF, chk15 = checksum[15] & 0xFF;
+		int[] state = new int[this.state.length];
+		int[] checksum = new int[this.checksum.length];
+		for (int i = 0; i < state.length; i++)
+			state[i] = this.state[i] & 0xFF;
+		for (int i = 0; i < checksum.length; i++)
+			checksum[i] = this.checksum[i] & 0xFF;
 		
+		int[] message = new int[16];
 		for (int i = off, end = off + len; i < end; i += 16) {
-			int msg00 = msg[i +  0] & 0xFF, msg01 = msg[i +  1] & 0xFF, msg02 = msg[i +  2] & 0xFF, msg03 = msg[i +  3] & 0xFF;
-			int msg04 = msg[i +  4] & 0xFF, msg05 = msg[i +  5] & 0xFF, msg06 = msg[i +  6] & 0xFF, msg07 = msg[i +  7] & 0xFF;
-			int msg08 = msg[i +  8] & 0xFF, msg09 = msg[i +  9] & 0xFF, msg10 = msg[i + 10] & 0xFF, msg11 = msg[i + 11] & 0xFF;
-			int msg12 = msg[i + 12] & 0xFF, msg13 = msg[i + 13] & 0xFF, msg14 = msg[i + 14] & 0xFF, msg15 = msg[i + 15] & 0xFF;
-			st16 = msg00;  st17 = msg01;  st18 = msg02;  st19 = msg03;
-			st20 = msg04;  st21 = msg05;  st22 = msg06;  st23 = msg07;
-			st24 = msg08;  st25 = msg09;  st26 = msg10;  st27 = msg11;
-			st28 = msg12;  st29 = msg13;  st30 = msg14;  st31 = msg15;
-			st32 = msg00 ^ st00;  st33 = msg01 ^ st01;  st34 = msg02 ^ st02;  st35 = msg03 ^ st03;
-			st36 = msg04 ^ st04;  st37 = msg05 ^ st05;  st38 = msg06 ^ st06;  st39 = msg07 ^ st07;
-			st40 = msg08 ^ st08;  st41 = msg09 ^ st09;  st42 = msg10 ^ st10;  st43 = msg11 ^ st11;
-			st44 = msg12 ^ st12;  st45 = msg13 ^ st13;  st46 = msg14 ^ st14;  st47 = msg15 ^ st15;
+			for (int j = 0; j < 16; j++)
+				message[j] = msg[i + j] & 0xFF;
 			
-			for (int j = 0, t = 0; j < 18; j++) {
-				st00 ^= SBOX[t   ];  st01 ^= SBOX[st00];  st02 ^= SBOX[st01];  st03 ^= SBOX[st02];
-				st04 ^= SBOX[st03];  st05 ^= SBOX[st04];  st06 ^= SBOX[st05];  st07 ^= SBOX[st06];
-				st08 ^= SBOX[st07];  st09 ^= SBOX[st08];  st10 ^= SBOX[st09];  st11 ^= SBOX[st10];
-				st12 ^= SBOX[st11];  st13 ^= SBOX[st12];  st14 ^= SBOX[st13];  st15 ^= SBOX[st14];
-				st16 ^= SBOX[st15];  st17 ^= SBOX[st16];  st18 ^= SBOX[st17];  st19 ^= SBOX[st18];
-				st20 ^= SBOX[st19];  st21 ^= SBOX[st20];  st22 ^= SBOX[st21];  st23 ^= SBOX[st22];
-				st24 ^= SBOX[st23];  st25 ^= SBOX[st24];  st26 ^= SBOX[st25];  st27 ^= SBOX[st26];
-				st28 ^= SBOX[st27];  st29 ^= SBOX[st28];  st30 ^= SBOX[st29];  st31 ^= SBOX[st30];
-				st32 ^= SBOX[st31];  st33 ^= SBOX[st32];  st34 ^= SBOX[st33];  st35 ^= SBOX[st34];
-				st36 ^= SBOX[st35];  st37 ^= SBOX[st36];  st38 ^= SBOX[st37];  st39 ^= SBOX[st38];
-				st40 ^= SBOX[st39];  st41 ^= SBOX[st40];  st42 ^= SBOX[st41];  st43 ^= SBOX[st42];
-				st44 ^= SBOX[st43];  st45 ^= SBOX[st44];  st46 ^= SBOX[st45];  st47 ^= SBOX[st46];
-				t = (st47 + j) & 0xFF;
+			for (int j = 0; j < 16; j++) {
+				state[j + 16] = message[j];
+				state[j + 32] = message[j] ^ state[j];
 			}
 			
-			chk00 ^= SBOX[msg00 ^ chk15];  chk01 ^= SBOX[msg01 ^ chk00];  chk02 ^= SBOX[msg02 ^ chk01];  chk03 ^= SBOX[msg03 ^ chk02];
-			chk04 ^= SBOX[msg04 ^ chk03];  chk05 ^= SBOX[msg05 ^ chk04];  chk06 ^= SBOX[msg06 ^ chk05];  chk07 ^= SBOX[msg07 ^ chk06];
-			chk08 ^= SBOX[msg08 ^ chk07];  chk09 ^= SBOX[msg09 ^ chk08];  chk10 ^= SBOX[msg10 ^ chk09];  chk11 ^= SBOX[msg11 ^ chk10];
-			chk12 ^= SBOX[msg12 ^ chk11];  chk13 ^= SBOX[msg13 ^ chk12];  chk14 ^= SBOX[msg14 ^ chk13];  chk15 ^= SBOX[msg15 ^ chk14];
+			int t = 0;
+			for (int j = 0; j < 18; j++) {
+				for (int k = 0; k < 48; k++)
+					t = state[k] ^= SBOX[t];
+				t = (t + j) & 0xFF;
+			}
+			
+			int l = checksum[15];
+			for (int j = 0; j < 16; j++) {
+				int temp = checksum[j] ^ SBOX[message[j] ^ l];
+				checksum[j] = temp;
+				l = temp;
+			}
 		}
 		
-		state[ 0] = (byte)st00;  state[ 1] = (byte)st01;  state[ 2] = (byte)st02;  state[ 3] = (byte)st03;
-		state[ 4] = (byte)st04;  state[ 5] = (byte)st05;  state[ 6] = (byte)st06;  state[ 7] = (byte)st07;
-		state[ 8] = (byte)st08;  state[ 9] = (byte)st09;  state[10] = (byte)st10;  state[11] = (byte)st11;
-		state[12] = (byte)st12;  state[13] = (byte)st13;  state[14] = (byte)st14;  state[15] = (byte)st15;
-		state[16] = (byte)st16;  state[17] = (byte)st17;  state[18] = (byte)st18;  state[19] = (byte)st19;
-		state[20] = (byte)st20;  state[21] = (byte)st21;  state[22] = (byte)st22;  state[23] = (byte)st23;
-		state[24] = (byte)st24;  state[25] = (byte)st25;  state[26] = (byte)st26;  state[27] = (byte)st27;
-		state[28] = (byte)st28;  state[29] = (byte)st29;  state[30] = (byte)st30;  state[31] = (byte)st31;
-		state[32] = (byte)st32;  state[33] = (byte)st33;  state[34] = (byte)st34;  state[35] = (byte)st35;
-		state[36] = (byte)st36;  state[37] = (byte)st37;  state[38] = (byte)st38;  state[39] = (byte)st39;
-		state[40] = (byte)st40;  state[41] = (byte)st41;  state[42] = (byte)st42;  state[43] = (byte)st43;
-		state[44] = (byte)st44;  state[45] = (byte)st45;  state[46] = (byte)st46;  state[47] = (byte)st47;
-		checksum[ 0] = (byte)chk00;  checksum[ 1] = (byte)chk01;  checksum[ 2] = (byte)chk02;  checksum[ 3] = (byte)chk03;
-		checksum[ 4] = (byte)chk04;  checksum[ 5] = (byte)chk05;  checksum[ 6] = (byte)chk06;  checksum[ 7] = (byte)chk07;
-		checksum[ 8] = (byte)chk08;  checksum[ 9] = (byte)chk09;  checksum[10] = (byte)chk10;  checksum[11] = (byte)chk11;
-		checksum[12] = (byte)chk12;  checksum[13] = (byte)chk13;  checksum[14] = (byte)chk14;  checksum[15] = (byte)chk15;
+		for (int i = 0; i < state.length; i++)
+			this.state[i] = (byte)state[i];
+		for (int i = 0; i < checksum.length; i++)
+			this.checksum[i] = (byte)checksum[i];
 	}
 	
 	
