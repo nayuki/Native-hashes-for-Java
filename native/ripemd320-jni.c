@@ -2,7 +2,8 @@
 #include <jni.h>
 
 
-extern void ripemd320_compress_block(const jbyte *block, uint32_t state[10]);
+#define STATE_LEN 10
+extern void ripemd320_compress_block(const jbyte *block, uint32_t state[STATE_LEN]);
 
 
 /*
@@ -18,8 +19,8 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Ripemd320_compress(JNIEnv *env
 	if (stateJava == NULL)
 		return 0;
 	unsigned int i;
-	uint32_t state[10];
-	for (i = 0; i < 10; i++)
+	uint32_t state[STATE_LEN];
+	for (i = 0; i < STATE_LEN; i++)
 		state[i] = (uint32_t)stateJava[i];
 	
 	// Iterate over each block in msg. Requires len to be a multiple of 64
@@ -33,7 +34,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Ripemd320_compress(JNIEnv *env
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	
 	// Convert state array to jint and clean up
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < STATE_LEN; i++)
 		stateJava[i] = (jint)state[i];
 	theEnv->ReleaseIntArrayElements(env, stateArray, stateJava, 0);
 	return 1;

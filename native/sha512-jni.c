@@ -2,7 +2,8 @@
 #include <jni.h>
 
 
-extern void sha512_compress_block(const jbyte *block, uint64_t state[8]);
+#define STATE_LEN 8
+extern void sha512_compress_block(const jbyte *block, uint64_t state[STATE_LEN]);
 
 
 /*
@@ -18,8 +19,8 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Sha512_compress(JNIEnv *env, j
 	if (stateJava == NULL)
 		return 0;
 	unsigned int i;
-	uint64_t state[8];
-	for (i = 0; i < 8; i++)
+	uint64_t state[STATE_LEN];
+	for (i = 0; i < STATE_LEN; i++)
 		state[i] = (uint64_t)stateJava[i];
 	
 	// Iterate over each block in msg. Requires len to be a multiple of 128
@@ -33,7 +34,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Sha512_compress(JNIEnv *env, j
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	
 	// Convert state array to jlong and clean up
-	for (i = 0; i < 8; i++)
+	for (i = 0; i < STATE_LEN; i++)
 		stateJava[i] = (jlong)state[i];
 	theEnv->ReleaseLongArrayElements(env, stateArray, stateJava, 0);
 	return 1;
