@@ -28,10 +28,7 @@ void ripemd160_compress_block(const jbyte *block, uint32_t state[5]) {
 	LOADSCHEDULE(14)
 	LOADSCHEDULE(15)
 	
-	// 32-bit left rotation
-	#define ROL(x, i)  \
-		(((x) << (i)) | ((x) >> (32 - (i))))
-	
+	#define ROTL32(x, n)  (((x) << (n)) | ((x) >> (32 - (n))))  // Assumes that x is uint32_t and 0 < n < 32
 	#define ROUND0(a, b, c, d, e, k, r, s)  ROUND(a, b, c, d, e, k, r, s, (b ^ c ^ d))
 	#define ROUND1(a, b, c, d, e, k, r, s)  ROUND(a, b, c, d, e, k, r, s, ((b & c) | (~b & d)))
 	#define ROUND2(a, b, c, d, e, k, r, s)  ROUND(a, b, c, d, e, k, r, s, ((b | ~c) ^ d))
@@ -40,8 +37,8 @@ void ripemd160_compress_block(const jbyte *block, uint32_t state[5]) {
 	
 	#define ROUND(a, b, c, d, e, k, r, s, f)  \
 		a = a + f + schedule[r] + UINT32_C(k);  \
-		a = ROL(a, s) + e;  \
-		c = ROL(c, 10);
+		a = ROTL32(a, s) + e;  \
+		c = ROTL32(c, 10);
 	
 	uint32_t al = state[0], ar = state[0];
 	uint32_t bl = state[1], br = state[1];

@@ -3,6 +3,8 @@
 
 
 void sha1_compress_block(const jbyte *block, uint32_t state[5]) {
+	#define ROTL32(x, n)  (((x) << (n)) | ((x) >> (32 - (n))))  // Assumes that x is uint32_t and 0 < n < 32
+	
 	#define LOADSCHEDULE(i)  \
 		schedule[i] =                                    \
 			  (uint32_t)(uint8_t)block[i * 4 + 0] << 24  \
@@ -12,7 +14,7 @@ void sha1_compress_block(const jbyte *block, uint32_t state[5]) {
 	
 	#define SCHEDULE(i)  \
 		temp = schedule[(i - 3) & 0xF] ^ schedule[(i - 8) & 0xF] ^ schedule[(i - 14) & 0xF] ^ schedule[(i - 16) & 0xF];  \
-		schedule[i & 0xF] = temp << 1 | temp >> 31;
+		schedule[i & 0xF] = ROTL32(temp, 1);
 	
 	#define ROUND0a(a, b, c, d, e, i)  LOADSCHEDULE(i)  ROUNDTAIL(a, b, e, ((b & c) | (~b & d))         , i, 0x5A827999)
 	#define ROUND0b(a, b, c, d, e, i)  SCHEDULE(i)      ROUNDTAIL(a, b, e, ((b & c) | (~b & d))         , i, 0x5A827999)
@@ -21,8 +23,8 @@ void sha1_compress_block(const jbyte *block, uint32_t state[5]) {
 	#define ROUND3(a, b, c, d, e, i)   SCHEDULE(i)      ROUNDTAIL(a, b, e, (b ^ c ^ d)                  , i, 0xCA62C1D6)
 	
 	#define ROUNDTAIL(a, b, e, f, i, k)  \
-		e += (a << 5 | a >> 27) + f + UINT32_C(k) + schedule[i & 0xF];  \
-		b = b << 30 | b >> 2;
+		e += ROTL32(a, 5) + f + UINT32_C(k) + schedule[i & 0xF];  \
+		b = ROTL32(b, 30);
 	
 	uint32_t a = state[0];
 	uint32_t b = state[1];

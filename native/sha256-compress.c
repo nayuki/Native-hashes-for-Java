@@ -3,9 +3,7 @@
 
 
 void sha256_compress_block(const jbyte *block, uint32_t state[8]) {
-	// 32-bit right rotation
-	#define ROR(x, i)  \
-		(((x) << (32 - (i))) | ((x) >> (i)))
+	#define ROTR32(x, n)  (((x) << (32 - (n))) | ((x) >> (n)))  // Assumes that x is uint32_t and 0 < n < 32
 	
 	#define LOADSCHEDULE(i)  \
 		schedule[i] =                                    \
@@ -16,13 +14,13 @@ void sha256_compress_block(const jbyte *block, uint32_t state[8]) {
 	
 	#define SCHEDULE(i)  \
 		schedule[i] = schedule[i - 16] + schedule[i - 7]  \
-			+ (ROR(schedule[i - 15], 7) ^ ROR(schedule[i - 15], 18) ^ (schedule[i - 15] >> 3))  \
-			+ (ROR(schedule[i - 2], 17) ^ ROR(schedule[i - 2], 19) ^ (schedule[i - 2] >> 10));
+			+ (ROTR32(schedule[i - 15], 7) ^ ROTR32(schedule[i - 15], 18) ^ (schedule[i - 15] >> 3))  \
+			+ (ROTR32(schedule[i - 2], 17) ^ ROTR32(schedule[i - 2], 19) ^ (schedule[i - 2] >> 10));
 	
 	#define ROUND(a, b, c, d, e, f, g, h, i, k) \
-		h += (ROR(e, 6) ^ ROR(e, 11) ^ ROR(e, 25)) + (g ^ (e & (f ^ g))) + UINT32_C(k) + schedule[i];  \
+		h += (ROTR32(e, 6) ^ ROTR32(e, 11) ^ ROTR32(e, 25)) + (g ^ (e & (f ^ g))) + UINT32_C(k) + schedule[i];  \
 		d += h;  \
-		h += (ROR(a, 2) ^ ROR(a, 13) ^ ROR(a, 22)) + ((a & (b | c)) | (b & c));
+		h += (ROTR32(a, 2) ^ ROTR32(a, 13) ^ ROTR32(a, 22)) + ((a & (b | c)) | (b & c));
 	
 	uint32_t schedule[64];
 	LOADSCHEDULE( 0)

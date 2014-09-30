@@ -28,13 +28,14 @@ void md5_compress_block(const jbyte *block, uint32_t state[4]) {
 	LOADSCHEDULE(14)
 	LOADSCHEDULE(15)
 	
+	#define ROTL32(x, n)  (((x) << (n)) | ((x) >> (32 - (n))))  // Assumes that x is uint32_t and 0 < n < 32
 	#define ROUND0(a, b, c, d, k, s, t)  ROUND_TAIL(a, b, d ^ (b & (c ^ d)), k, s, t)
 	#define ROUND1(a, b, c, d, k, s, t)  ROUND_TAIL(a, b, c ^ (d & (b ^ c)), k, s, t)
 	#define ROUND2(a, b, c, d, k, s, t)  ROUND_TAIL(a, b, b ^ c ^ d        , k, s, t)
 	#define ROUND3(a, b, c, d, k, s, t)  ROUND_TAIL(a, b, c ^ (b | ~d)     , k, s, t)
 	#define ROUND_TAIL(a, b, expr, k, s, t)    \
 		a += (expr) + UINT32_C(t) + schedule[k];  \
-		a = b + (a << s | a >> (32 - s));
+		a = b + ROTL32(a, s);
 	
 	uint32_t a = state[0];
 	uint32_t b = state[1];
