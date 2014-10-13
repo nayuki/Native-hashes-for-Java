@@ -36,7 +36,7 @@ void ripemd160_compress_block(const jbyte *block, uint32_t state[5]) {
 	#define ROUND4(a, b, c, d, e, k, r, s)  ROUND(a, b, c, d, e, k, r, s, (b ^ (c | ~d)))
 	
 	#define ROUND(a, b, c, d, e, k, r, s, f)  \
-		a = a + f + schedule[r] + UINT32_C(k);  \
+		a += f + schedule[r] + UINT32_C(k);  \
 		a = ROTL32(a, s) + e;  \
 		c = ROTL32(c, 10);
 	
