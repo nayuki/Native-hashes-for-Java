@@ -1,3 +1,10 @@
+/* 
+ * Native hash functions for Java
+ * 
+ * Copyright (c) Nayuki Minase
+ * http://nayuki.eigenstate.org/page/native-hash-functions-for-java
+ */
+
 #include <stdint.h>
 #include <string.h>
 #include <jni.h>

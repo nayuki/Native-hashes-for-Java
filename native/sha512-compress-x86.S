@@ -1,3 +1,11 @@
+/* 
+ * Native hash functions for Java
+ * 
+ * Copyright (c) Nayuki Minase
+ * http://nayuki.eigenstate.org/page/native-hash-functions-for-java
+ */
+
+
 /* void sha512_compress(const uint8_t block[128], uint64_t state[8]) */
 .globl sha512_compress
 sha512_compress:

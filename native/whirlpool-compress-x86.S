@@ -1,3 +1,11 @@
+/* 
+ * Native hash functions for Java
+ * 
+ * Copyright (c) Nayuki Minase
+ * http://nayuki.eigenstate.org/page/native-hash-functions-for-java
+ */
+
+
 /* void whirlpool_compress_block(const uint8_t block[64], uint8_t state[64]) */
 /* state and block can be optionally aligned to 8 bytes for slightly better performance. */
 .globl whirlpool_compress_block

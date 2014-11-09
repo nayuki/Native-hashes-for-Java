@@ -1,3 +1,10 @@
+/* 
+ * Native hash functions for Java
+ * 
+ * Copyright (c) Nayuki Minase
+ * http://nayuki.eigenstate.org/page/native-hash-functions-for-java
+ */
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

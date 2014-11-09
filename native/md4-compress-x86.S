@@ -1,3 +1,11 @@
+/* 
+ * Native hash functions for Java
+ * 
+ * Copyright (c) Nayuki Minase
+ * http://nayuki.eigenstate.org/page/native-hash-functions-for-java
+ */
+
+
 /* void md4_compress_block(const uint8_t block[64], uint32_t state[4]) */
 .globl md4_compress_block
 md4_compress_block:

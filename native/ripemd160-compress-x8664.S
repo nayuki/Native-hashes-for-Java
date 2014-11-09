@@ -1,3 +1,11 @@
+/* 
+ * Native hash functions for Java
+ * 
+ * Copyright (c) Nayuki Minase
+ * http://nayuki.eigenstate.org/page/native-hash-functions-for-java
+ */
+
+
 /* void ripemd160_compress_block(const uint8_t block[64], uint32_t state[5]) */
 .globl ripemd160_compress_block
 ripemd160_compress_block:
