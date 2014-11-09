@@ -8,7 +8,6 @@
 package nayuki.nativehash;
 
 
-
 public abstract class BlockHasher implements Cloneable {
 	
 	protected byte[] block;
@@ -22,7 +21,6 @@ public abstract class BlockHasher implements Cloneable {
 		blockFilled = 0;
 		length = 0;
 	}
-	
 	
 	
 	
