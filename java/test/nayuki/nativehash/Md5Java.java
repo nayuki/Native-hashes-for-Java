@@ -1,8 +1,8 @@
 /* 
  * Native hash functions for Java
  * 
- * Copyright (c) Nayuki Minase
- * http://nayuki.eigenstate.org/page/native-hash-functions-for-java
+ * Copyright (c) Project Nayuki
+ * http://www.nayuki.io/page/native-hash-functions-for-java
  */
 
 package nayuki.nativehash;
