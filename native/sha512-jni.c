@@ -13,7 +13,7 @@
 extern void sha512_compress_block(const jbyte *block, uint64_t state[STATE_LEN]);
 
 
-/*
+/* 
  * Class:     nayuki_nativehash_Sha512
  * Method:    compress
  * Signature: ([J[BII)Z

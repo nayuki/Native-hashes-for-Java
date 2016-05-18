@@ -13,7 +13,7 @@
 extern void whirlpool_compress_block(const jbyte *block, uint8_t state[STATE_LEN]);
 
 
-/*
+/* 
  * Class:     nayuki_nativehash_Whirlpool
  * Method:    compress
  * Signature: ([B[BII)Z

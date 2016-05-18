@@ -14,7 +14,7 @@
 extern void md2_compress_block(const jbyte *block, uint8_t state[STATE_LEN], uint8_t checksum[CHECKSUM_LEN]);
 
 
-/*
+/* 
  * Class:     nayuki_nativehash_Md2
  * Method:    compress
  * Signature: ([B[B[BII)Z

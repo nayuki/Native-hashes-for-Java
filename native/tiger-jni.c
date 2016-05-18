@@ -13,7 +13,7 @@
 extern void tiger_compress_block(const jbyte *block, uint64_t state[STATE_LEN]);
 
 
-/*
+/* 
  * Class:     nayuki_nativehash_Tiger
  * Method:    compress
  * Signature: ([J[BII)Z

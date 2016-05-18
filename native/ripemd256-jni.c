@@ -13,7 +13,7 @@
 extern void ripemd256_compress_block(const jbyte *block, uint32_t state[STATE_LEN]);
 
 
-/*
+/* 
  * Class:     nayuki_nativehash_Ripemd256
  * Method:    compress
  * Signature: ([I[BII)Z

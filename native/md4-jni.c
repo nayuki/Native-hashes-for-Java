@@ -13,7 +13,7 @@
 extern void md4_compress_block(const jbyte *block, uint32_t state[STATE_LEN]);
 
 
-/*
+/* 
  * Class:     nayuki_nativehash_Md4
  * Method:    compress
  * Signature: ([I[BII)Z
