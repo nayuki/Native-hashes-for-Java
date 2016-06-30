@@ -20,13 +20,13 @@ extern void ripemd128_compress_block(const jbyte *block, uint32_t state[STATE_LE
  */
 JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Ripemd128_compress(JNIEnv *env, jclass thisClass, jintArray stateArray, jbyteArray msg, jint off, jint len) {
 	if (len < 0 || (len & 63) != 0)  // Block size is 64 bytes
-		return 0;
+		return JNI_FALSE;
 	JNIEnv theEnv = *env;
 	
 	// Get state array and convert to uint32_t
 	jint *stateJava = theEnv->GetIntArrayElements(env, stateArray, NULL);
 	if (stateJava == NULL)
-		return 0;
+		return JNI_FALSE;
 	unsigned int i;
 	uint32_t state[STATE_LEN];
 	for (i = 0; i < STATE_LEN; i++)
@@ -35,7 +35,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Ripemd128_compress(JNIEnv *env
 	// Iterate over each block in msg
 	jbyte *block = theEnv->GetPrimitiveArrayCritical(env, msg, NULL);
 	if (block == NULL)
-		return 0;
+		return JNI_FALSE;
 	size_t newoff;
 	size_t newlen = len;
 	for (newoff = 0; newoff < newlen; newoff += 64)
@@ -46,5 +46,5 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Ripemd128_compress(JNIEnv *env
 	for (i = 0; i < STATE_LEN; i++)
 		stateJava[i] = (jint)state[i];
 	theEnv->ReleaseIntArrayElements(env, stateArray, stateJava, 0);
-	return 1;
+	return JNI_TRUE;
 }

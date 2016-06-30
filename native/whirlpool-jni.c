@@ -20,13 +20,13 @@ extern void whirlpool_compress_block(const jbyte *block, uint8_t state[STATE_LEN
  */
 JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Whirlpool_compress(JNIEnv *env, jclass thisClass, jbyteArray stateArray, jbyteArray msg, jint off, jint len) {
 	if (len < 0 || (len & 63) != 0)  // Block size is 64 bytes
-		return 0;
+		return JNI_FALSE;
 	JNIEnv theEnv = *env;
 	
 	// Get state array and convert to uint8_t
 	jbyte *stateJava = theEnv->GetByteArrayElements(env, stateArray, NULL);
 	if (stateJava == NULL)
-		return 0;
+		return JNI_FALSE;
 	unsigned int i;
 	uint8_t state[STATE_LEN];
 	for (i = 0; i < STATE_LEN; i++)
@@ -35,7 +35,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Whirlpool_compress(JNIEnv *env
 	// Iterate over each block in msg
 	jbyte *block = theEnv->GetPrimitiveArrayCritical(env, msg, NULL);
 	if (block == NULL)
-		return 0;
+		return JNI_FALSE;
 	size_t newoff;
 	size_t newlen = len;
 	for (newoff = 0; newoff < newlen; newoff += 64)
@@ -46,5 +46,5 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Whirlpool_compress(JNIEnv *env
 	for (i = 0; i < STATE_LEN; i++)
 		stateJava[i] = (jbyte)state[i];
 	theEnv->ReleaseByteArrayElements(env, stateArray, stateJava, 0);
-	return 1;
+	return JNI_TRUE;
 }
