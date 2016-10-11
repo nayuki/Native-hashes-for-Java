@@ -34,14 +34,14 @@ void md5_compress_block(const jbyte *block, uint32_t state[4]) {
 	LOADSCHEDULE(14)
 	LOADSCHEDULE(15)
 	
-	#define ROTL32(x, n)  (((x) << (n)) | ((x) >> (32 - (n))))  // Assumes that x is uint32_t and 0 < n < 32
+	#define ROTL32(x, n)  (((0U + (x)) << (n)) | ((x) >> (32 - (n))))  // Assumes that x is uint32_t and 0 < n < 32
 	#define ROUND0(a, b, c, d, k, s, t)  ROUND_TAIL(a, b, d ^ (b & (c ^ d)), k, s, t)
 	#define ROUND1(a, b, c, d, k, s, t)  ROUND_TAIL(a, b, c ^ (d & (b ^ c)), k, s, t)
 	#define ROUND2(a, b, c, d, k, s, t)  ROUND_TAIL(a, b, b ^ c ^ d        , k, s, t)
 	#define ROUND3(a, b, c, d, k, s, t)  ROUND_TAIL(a, b, c ^ (b | ~d)     , k, s, t)
 	#define ROUND_TAIL(a, b, expr, k, s, t)    \
-		a += (expr) + UINT32_C(t) + schedule[k];  \
-		a = b + ROTL32(a, s);
+		a = 0U + a + (expr) + UINT32_C(t) + schedule[k];  \
+		a = 0U + b + ROTL32(a, s);
 	
 	uint32_t a = state[0];
 	uint32_t b = state[1];
@@ -113,8 +113,8 @@ void md5_compress_block(const jbyte *block, uint32_t state[4]) {
 	ROUND3(c, d, a, b,  2, 15, 0x2AD7D2BB)
 	ROUND3(b, c, d, a,  9, 21, 0xEB86D391)
 	
-	state[0] += a;
-	state[1] += b;
-	state[2] += c;
-	state[3] += d;
+	state[0] = 0U + state[0] + a;
+	state[1] = 0U + state[1] + b;
+	state[2] = 0U + state[2] + c;
+	state[3] = 0U + state[3] + d;
 }

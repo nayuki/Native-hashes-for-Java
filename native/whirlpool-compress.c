@@ -113,15 +113,16 @@ static void whirlpool_round(uint64_t block[8], const uint64_t key[8]) {
 	uint64_t h = block[7];
 	
 	uint64_t r;
+	#define ROTR64(x, n)  (((0U + (x)) << (64 - (n))) | ((x) >> (n)))  // Assumes that x is uint64_t and 0 < n < 64
 	#define DOROW(i, s, t, u, v, w, x, y, z)  \
-		r = MAGIC_TABLE[(uint8_t)s];  r = (r << 56) | (r >> 8);  \
-		r ^= MAGIC_TABLE[(uint8_t)(t >>  8)];  r = (r << 56) | (r >> 8);  \
-		r ^= MAGIC_TABLE[(uint8_t)(u >> 16)];  r = (r << 56) | (r >> 8);  \
-		r ^= MAGIC_TABLE[(uint8_t)(v >> 24)];  r = (r << 56) | (r >> 8);  \
-		r ^= MAGIC_TABLE[(uint8_t)(w >> 32)];  r = (r << 56) | (r >> 8);  \
-		r ^= MAGIC_TABLE[(uint8_t)(x >> 40)];  r = (r << 56) | (r >> 8);  \
-		r ^= MAGIC_TABLE[(uint8_t)(y >> 48)];  r = (r << 56) | (r >> 8);  \
-		r ^= MAGIC_TABLE[(uint8_t)(z >> 56)];  r = (r << 56) | (r >> 8);  \
+		r = MAGIC_TABLE[(uint8_t)s];  r = ROTR64(r, 8);  \
+		r ^= MAGIC_TABLE[(uint8_t)(t >>  8)];  r = ROTR64(r, 8);  \
+		r ^= MAGIC_TABLE[(uint8_t)(u >> 16)];  r = ROTR64(r, 8);  \
+		r ^= MAGIC_TABLE[(uint8_t)(v >> 24)];  r = ROTR64(r, 8);  \
+		r ^= MAGIC_TABLE[(uint8_t)(w >> 32)];  r = ROTR64(r, 8);  \
+		r ^= MAGIC_TABLE[(uint8_t)(x >> 40)];  r = ROTR64(r, 8);  \
+		r ^= MAGIC_TABLE[(uint8_t)(y >> 48)];  r = ROTR64(r, 8);  \
+		r ^= MAGIC_TABLE[(uint8_t)(z >> 56)];  r = ROTR64(r, 8);  \
 		block[i] = r ^ key[i];
 	
 	DOROW(0, a, h, g, f, e, d, c, b)

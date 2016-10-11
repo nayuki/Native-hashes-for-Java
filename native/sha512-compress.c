@@ -10,7 +10,7 @@
 
 
 void sha512_compress_block(const jbyte *block, uint64_t state[8]) {
-	#define ROTR64(x, n)  (((x) << (64 - (n))) | ((x) >> (n)))  // Assumes that x is uint64_t and 0 < n < 64
+	#define ROTR64(x, n)  (((0U + (x)) << (64 - (n))) | ((x) >> (n)))  // Assumes that x is uint64_t and 0 < n < 64
 	
 	#define LOADSCHEDULE(i)  \
 		schedule[i] = (uint64_t)(uint8_t)block[i * 8 + 0] << 56  \
@@ -23,14 +23,14 @@ void sha512_compress_block(const jbyte *block, uint64_t state[8]) {
 		            | (uint64_t)(uint8_t)block[i * 8 + 7] <<  0;
 	
 	#define SCHEDULE(i)  \
-		schedule[i] = schedule[i - 16] + schedule[i - 7]  \
+		schedule[i] = 0U + schedule[i - 16] + schedule[i - 7]  \
 			+ (ROTR64(schedule[i - 15], 1) ^ ROTR64(schedule[i - 15], 8) ^ (schedule[i - 15] >> 7))  \
 			+ (ROTR64(schedule[i - 2], 19) ^ ROTR64(schedule[i - 2], 61) ^ (schedule[i - 2] >> 6));
 	
 	#define ROUND(a, b, c, d, e, f, g, h, i, k) \
-		h += (ROTR64(e, 14) ^ ROTR64(e, 18) ^ ROTR64(e, 41)) + (g ^ (e & (f ^ g))) + UINT64_C(k) + schedule[i];  \
-		d += h;  \
-		h += (ROTR64(a, 28) ^ ROTR64(a, 34) ^ ROTR64(a, 39)) + ((a & (b | c)) | (b & c));
+		h = 0U + h + (ROTR64(e, 14) ^ ROTR64(e, 18) ^ ROTR64(e, 41)) + (g ^ (e & (f ^ g))) + UINT64_C(k) + schedule[i];  \
+		d = 0U + d + h;  \
+		h = 0U + h + (ROTR64(a, 28) ^ ROTR64(a, 34) ^ ROTR64(a, 39)) + ((a & (b | c)) | (b & c));
 	
 	uint64_t schedule[80];
 	LOADSCHEDULE( 0)
@@ -202,12 +202,12 @@ void sha512_compress_block(const jbyte *block, uint64_t state[8]) {
 	ROUND(d, e, f, g, h, a, b, c, 77, 0x597F299CFC657E2A)
 	ROUND(c, d, e, f, g, h, a, b, 78, 0x5FCB6FAB3AD6FAEC)
 	ROUND(b, c, d, e, f, g, h, a, 79, 0x6C44198C4A475817)
-	state[0] += a;
-	state[1] += b;
-	state[2] += c;
-	state[3] += d;
-	state[4] += e;
-	state[5] += f;
-	state[6] += g;
-	state[7] += h;
+	state[0] = 0U + state[0] + a;
+	state[1] = 0U + state[1] + b;
+	state[2] = 0U + state[2] + c;
+	state[3] = 0U + state[3] + d;
+	state[4] = 0U + state[4] + e;
+	state[5] = 0U + state[5] + f;
+	state[6] = 0U + state[6] + g;
+	state[7] = 0U + state[7] + h;
 }

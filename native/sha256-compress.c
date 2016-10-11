@@ -10,7 +10,7 @@
 
 
 void sha256_compress_block(const jbyte *block, uint32_t state[8]) {
-	#define ROTR32(x, n)  (((x) << (32 - (n))) | ((x) >> (n)))  // Assumes that x is uint32_t and 0 < n < 32
+	#define ROTR32(x, n)  (((0U + (x)) << (32 - (n))) | ((x) >> (n)))  // Assumes that x is uint32_t and 0 < n < 32
 	
 	#define LOADSCHEDULE(i)  \
 		schedule[i] = (uint32_t)(uint8_t)block[i * 4 + 0] << 24  \
@@ -19,14 +19,14 @@ void sha256_compress_block(const jbyte *block, uint32_t state[8]) {
 		            | (uint32_t)(uint8_t)block[i * 4 + 3] <<  0;
 	
 	#define SCHEDULE(i)  \
-		schedule[i] = schedule[i - 16] + schedule[i - 7]  \
+		schedule[i] = 0U + schedule[i - 16] + schedule[i - 7]  \
 			+ (ROTR32(schedule[i - 15], 7) ^ ROTR32(schedule[i - 15], 18) ^ (schedule[i - 15] >> 3))  \
 			+ (ROTR32(schedule[i - 2], 17) ^ ROTR32(schedule[i - 2], 19) ^ (schedule[i - 2] >> 10));
 	
 	#define ROUND(a, b, c, d, e, f, g, h, i, k) \
-		h += (ROTR32(e, 6) ^ ROTR32(e, 11) ^ ROTR32(e, 25)) + (g ^ (e & (f ^ g))) + UINT32_C(k) + schedule[i];  \
-		d += h;  \
-		h += (ROTR32(a, 2) ^ ROTR32(a, 13) ^ ROTR32(a, 22)) + ((a & (b | c)) | (b & c));
+		h = 0U + h + (ROTR32(e, 6) ^ ROTR32(e, 11) ^ ROTR32(e, 25)) + (g ^ (e & (f ^ g))) + UINT32_C(k) + schedule[i];  \
+		d = 0U + d + h;  \
+		h = 0U + h + (ROTR32(a, 2) ^ ROTR32(a, 13) ^ ROTR32(a, 22)) + ((a & (b | c)) | (b & c));
 	
 	uint32_t schedule[64];
 	LOADSCHEDULE( 0)
@@ -166,12 +166,12 @@ void sha256_compress_block(const jbyte *block, uint32_t state[8]) {
 	ROUND(d, e, f, g, h, a, b, c, 61, 0xA4506CEB)
 	ROUND(c, d, e, f, g, h, a, b, 62, 0xBEF9A3F7)
 	ROUND(b, c, d, e, f, g, h, a, 63, 0xC67178F2)
-	state[0] += a;
-	state[1] += b;
-	state[2] += c;
-	state[3] += d;
-	state[4] += e;
-	state[5] += f;
-	state[6] += g;
-	state[7] += h;
+	state[0] = 0U + state[0] + a;
+	state[1] = 0U + state[1] + b;
+	state[2] = 0U + state[2] + c;
+	state[3] = 0U + state[3] + d;
+	state[4] = 0U + state[4] + e;
+	state[5] = 0U + state[5] + f;
+	state[6] = 0U + state[6] + g;
+	state[7] = 0U + state[7] + h;
 }

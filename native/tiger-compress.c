@@ -290,28 +290,28 @@ void tiger_compress_block(const jbyte *block, uint64_t state[3]) {
 		            | (uint64_t)(uint8_t)block[i * 8 + 7] << 56;
 	
 	#define DOSCHEDULE()  \
-		schedule[0] -= schedule[7] ^ UINT64_C(0xA5A5A5A5A5A5A5A5);  \
-		schedule[1] ^= schedule[0];                                 \
-		schedule[2] += schedule[1];                                 \
-		schedule[3] -= schedule[2] ^ (~schedule[1] << 19);          \
-		schedule[4] ^= schedule[3];                                 \
-		schedule[5] += schedule[4];                                 \
-		schedule[6] -= schedule[5] ^ (~schedule[4] >> 23);          \
-		schedule[7] ^= schedule[6];                                 \
-		schedule[0] += schedule[7];                                 \
-		schedule[1] -= schedule[0] ^ (~schedule[7] << 19);          \
-		schedule[2] ^= schedule[1];                                 \
-		schedule[3] += schedule[2];                                 \
-		schedule[4] -= schedule[3] ^ (~schedule[2] >> 23);          \
-		schedule[5] ^= schedule[4];                                 \
-		schedule[6] += schedule[5];                                 \
-		schedule[7] -= schedule[6] ^ UINT64_C(0x0123456789ABCDEF);  \
+		schedule[0] = 0U + schedule[0] - (schedule[7] ^ UINT64_C(0xA5A5A5A5A5A5A5A5));  \
+		schedule[1] ^= schedule[0];                                                     \
+		schedule[2] = 0U + schedule[2] + schedule[1];                                   \
+		schedule[3] = 0U + schedule[3] - (schedule[2] ^ (~(0U + schedule[1]) << 19));   \
+		schedule[4] ^= schedule[3];                                                     \
+		schedule[5] = 0U + schedule[5] + schedule[4];                                   \
+		schedule[6] = 0U + schedule[6] - (schedule[5] ^ (~schedule[4] >> 23));          \
+		schedule[7] ^= schedule[6];                                                     \
+		schedule[0] = 0U + schedule[0] + schedule[7];                                   \
+		schedule[1] = 0U + schedule[1] - (schedule[0] ^ (~(0U + schedule[7]) << 19));   \
+		schedule[2] ^= schedule[1];                                                     \
+		schedule[3] = 0U + schedule[3] + schedule[2];                                   \
+		schedule[4] = 0U + schedule[4] - (schedule[3] ^ (~schedule[2] >> 23));          \
+		schedule[5] ^= schedule[4];                                                     \
+		schedule[6] = 0U + schedule[6] + schedule[5];                                   \
+		schedule[7] = 0U + schedule[7] - (schedule[6] ^ UINT64_C(0x0123456789ABCDEF));  \
 	
 	#define ROUND(a, b, c, i, j)  \
 		c ^= schedule[i];                                                                                       \
-		a -= T1[(uint8_t)(c     )] ^ T2[(uint8_t)(c >> 16)] ^ T3[(uint8_t)(c >> 32)] ^ T4[(uint8_t)(c >> 48)];  \
-		b += T4[(uint8_t)(c >> 8)] ^ T3[(uint8_t)(c >> 24)] ^ T2[(uint8_t)(c >> 40)] ^ T1[(uint8_t)(c >> 56)];  \
-		b *= j;
+		a = 0U + a - (T1[(uint8_t)(c     )] ^ T2[(uint8_t)(c >> 16)] ^ T3[(uint8_t)(c >> 32)] ^ T4[(uint8_t)(c >> 48)]);  \
+		b = 0U + b + (T4[(uint8_t)(c >> 8)] ^ T3[(uint8_t)(c >> 24)] ^ T2[(uint8_t)(c >> 40)] ^ T1[(uint8_t)(c >> 56)]);  \
+		b = 1U * b * j;
 	
 	uint64_t schedule[8];
 	LOADSCHEDULE(0)
@@ -353,6 +353,6 @@ void tiger_compress_block(const jbyte *block, uint64_t state[3]) {
 	ROUND(b, c, a, 6, 9)
 	ROUND(c, a, b, 7, 9)
 	state[0] = a ^ state[0];
-	state[1] = b - state[1];
-	state[2] = c + state[2];
+	state[1] = 0U + b - state[1];
+	state[2] = 0U + c + state[2];
 }

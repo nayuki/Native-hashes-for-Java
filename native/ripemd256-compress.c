@@ -34,14 +34,14 @@ void ripemd256_compress_block(const jbyte *block, uint32_t state[8]) {
 	LOADSCHEDULE(14)
 	LOADSCHEDULE(15)
 	
-	#define ROTL32(x, n)  (((x) << (n)) | ((x) >> (32 - (n))))  // Assumes that x is uint32_t and 0 < n < 32
+	#define ROTL32(x, n)  (((0U + (x)) << (n)) | ((x) >> (32 - (n))))  // Assumes that x is uint32_t and 0 < n < 32
 	#define ROUND0(a, b, c, d, k, r, s)  ROUND(a, b, c, d, k, r, s, (b ^ c ^ d))
 	#define ROUND1(a, b, c, d, k, r, s)  ROUND(a, b, c, d, k, r, s, ((b & c) | (~b & d)))
 	#define ROUND2(a, b, c, d, k, r, s)  ROUND(a, b, c, d, k, r, s, ((b | ~c) ^ d))
 	#define ROUND3(a, b, c, d, k, r, s)  ROUND(a, b, c, d, k, r, s, ((b & d) | (c & ~d)))
 	
 	#define ROUND(a, b, c, d, k, r, s, f)  \
-		a += f + schedule[r] + UINT32_C(k);  \
+		a = 0U + a + f + schedule[r] + UINT32_C(k);  \
 		a = ROTL32(a, s);
 	
 	uint32_t al = state[0], ar = state[4];
@@ -114,12 +114,12 @@ void ripemd256_compress_block(const jbyte *block, uint32_t state[8]) {
 	ROUND3(cr, dl, ar, br, 0x8F1BBCDC,  6,  5)  ROUND0(cl, dr, al, bl, 0x00000000, 10, 15)
 	ROUND3(br, cr, dl, ar, 0x8F1BBCDC,  2, 12)  ROUND0(bl, cl, dr, al, 0x00000000, 14,  8)
 	
-	state[0] += ar;
-	state[1] += br;
-	state[2] += cr;
-	state[3] += dr;
-	state[4] += al;
-	state[5] += bl;
-	state[6] += cl;
-	state[7] += dl;
+	state[0] = 0U + state[0] + ar;
+	state[1] = 0U + state[1] + br;
+	state[2] = 0U + state[2] + cr;
+	state[3] = 0U + state[3] + dr;
+	state[4] = 0U + state[4] + al;
+	state[5] = 0U + state[5] + bl;
+	state[6] = 0U + state[6] + cl;
+	state[7] = 0U + state[7] + dl;
 }
