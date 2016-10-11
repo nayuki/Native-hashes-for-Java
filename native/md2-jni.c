@@ -23,6 +23,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Md2_compress(JNIEnv *env, jcla
 	if (len < 0 || (len & 15) != 0)  // Block size is 16 bytes
 		return JNI_FALSE;
 	JNIEnv theEnv = *env;
+	(void)thisClass;
 	
 	// Get state and checksum arrays and convert to uint8_t
 	jbyte *stateJava = theEnv->GetByteArrayElements(env, stateArray, NULL);

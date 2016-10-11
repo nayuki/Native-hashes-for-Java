@@ -22,6 +22,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Ripemd128_compress(JNIEnv *env
 	if (len < 0 || (len & 63) != 0)  // Block size is 64 bytes
 		return JNI_FALSE;
 	JNIEnv theEnv = *env;
+	(void)thisClass;
 	
 	// Get state array and convert to uint32_t
 	jint *stateJava = theEnv->GetIntArrayElements(env, stateArray, NULL);

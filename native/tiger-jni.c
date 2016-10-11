@@ -22,6 +22,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Tiger_compress(JNIEnv *env, jc
 	if (len < 0 || (len & 63) != 0)  // Block size is 64 bytes
 		return JNI_FALSE;
 	JNIEnv theEnv = *env;
+	(void)thisClass;
 	
 	// Get state array and convert to uint64_t
 	jlong *stateJava = theEnv->GetLongArrayElements(env, stateArray, NULL);
