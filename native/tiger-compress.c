@@ -352,7 +352,7 @@ void tiger_compress_block(const jbyte *block, uint64_t state[3]) {
 	ROUND(a, b, c, 5, 9)
 	ROUND(b, c, a, 6, 9)
 	ROUND(c, a, b, 7, 9)
-	state[0] = a ^= state[0];
-	state[1] = b -= state[1];
-	state[2] = c += state[2];
+	state[0] = a ^ state[0];
+	state[1] = b - state[1];
+	state[2] = c + state[2];
 }
