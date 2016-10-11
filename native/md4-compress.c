@@ -35,9 +35,10 @@ void md4_compress_block(const jbyte *block, uint32_t state[4]) {
 	LOADSCHEDULE(15)
 	
 	#define ROTL32(x, n)  (((x) << (n)) | ((x) >> (32 - (n))))  // Assumes that x is uint32_t and 0 < n < 32
-	#define ROUND0(a, b, c, d, k, s)  a += (d ^ (b & (c ^ d)))       + schedule[k]             ;  a = ROTL32(a, s);
-	#define ROUND1(a, b, c, d, k, s)  a += ((b & c) | (d & (b | c))) + schedule[k] + 0x5A827999;  a = ROTL32(a, s);
-	#define ROUND2(a, b, c, d, k, s)  a += (b ^ c ^ d)               + schedule[k] + 0x6ED9EBA1;  a = ROTL32(a, s);
+	#define ROUND0(a, b, c, d, k, s)  ROUND_TAIL(a, d ^ (b & (c ^ d))      , k, s, 0x00000000)
+	#define ROUND1(a, b, c, d, k, s)  ROUND_TAIL(a, (b & c) | (d & (b | c)), k, s, 0x5A827999)
+	#define ROUND2(a, b, c, d, k, s)  ROUND_TAIL(a, b ^ c ^ d              , k, s, 0x6ED9EBA1)
+	#define ROUND_TAIL(a, expr, k, s, t)  a += (expr) + schedule[k] + UINT32_C(t);  a = ROTL32(a, s);
 	
 	uint32_t a = state[0];
 	uint32_t b = state[1];
