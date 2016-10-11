@@ -8,5 +8,5 @@ functionality.
 
 Home page: https://www.nayuki.io/page/native-hash-functions-for-java
 
-Copyright © 2014 Project Nayuki  
+Copyright © 2016 Project Nayuki  
 Licensed under the GNU Public License v3.0+ (see COPYING.txt)
