@@ -32,24 +32,25 @@ void whirlpool_compress_block(const jbyte *block, uint8_t state[64]) {
 	int i;
 	
 	for (i = 0; i < 8; i++) {
-		tempState[i] = 
-			  (uint64_t)state[(i << 3) + 0] <<  0
-			| (uint64_t)state[(i << 3) + 1] <<  8
-			| (uint64_t)state[(i << 3) + 2] << 16
-			| (uint64_t)state[(i << 3) + 3] << 24
-			| (uint64_t)state[(i << 3) + 4] << 32
-			| (uint64_t)state[(i << 3) + 5] << 40
-			| (uint64_t)state[(i << 3) + 6] << 48
-			| (uint64_t)state[(i << 3) + 7] << 56;
-		tempBlock[i] = tempState[i] ^ (
-			  (uint64_t)(uint8_t)block[(i << 3) + 0] <<  0
-			| (uint64_t)(uint8_t)block[(i << 3) + 1] <<  8
-			| (uint64_t)(uint8_t)block[(i << 3) + 2] << 16
-			| (uint64_t)(uint8_t)block[(i << 3) + 3] << 24
-			| (uint64_t)(uint8_t)block[(i << 3) + 4] << 32
-			| (uint64_t)(uint8_t)block[(i << 3) + 5] << 40
-			| (uint64_t)(uint8_t)block[(i << 3) + 6] << 48
-			| (uint64_t)(uint8_t)block[(i << 3) + 7] << 56);
+		int j = i << 3;
+		uint64_t x = (uint64_t)state[j + 0] <<  0
+		           | (uint64_t)state[j + 1] <<  8
+		           | (uint64_t)state[j + 2] << 16
+		           | (uint64_t)state[j + 3] << 24
+		           | (uint64_t)state[j + 4] << 32
+		           | (uint64_t)state[j + 5] << 40
+		           | (uint64_t)state[j + 6] << 48
+		           | (uint64_t)state[j + 7] << 56;
+		uint64_t y = (uint64_t)(uint8_t)block[j + 0] <<  0
+		           | (uint64_t)(uint8_t)block[j + 1] <<  8
+		           | (uint64_t)(uint8_t)block[j + 2] << 16
+		           | (uint64_t)(uint8_t)block[j + 3] << 24
+		           | (uint64_t)(uint8_t)block[j + 4] << 32
+		           | (uint64_t)(uint8_t)block[j + 5] << 40
+		           | (uint64_t)(uint8_t)block[j + 6] << 48
+		           | (uint64_t)(uint8_t)block[j + 7] << 56;
+		tempState[i] = x;
+		tempBlock[i] = x ^ y;
 	}
 	
 	uint64_t rcon[8];
