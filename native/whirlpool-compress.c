@@ -33,7 +33,7 @@ void whirlpool_compress_block(const jbyte *block, uint8_t state[64]) {
 	
 	for (i = 0; i < 8; i++) {
 		tempState[i] = 
-			  (uint64_t)state[i << 3]
+			  (uint64_t)state[(i << 3) + 0] <<  0
 			| (uint64_t)state[(i << 3) + 1] <<  8
 			| (uint64_t)state[(i << 3) + 2] << 16
 			| (uint64_t)state[(i << 3) + 3] << 24
@@ -42,7 +42,7 @@ void whirlpool_compress_block(const jbyte *block, uint8_t state[64]) {
 			| (uint64_t)state[(i << 3) + 6] << 48
 			| (uint64_t)state[(i << 3) + 7] << 56;
 		tempBlock[i] = tempState[i] ^ (
-			  (uint64_t)(uint8_t)block[i << 3]
+			  (uint64_t)(uint8_t)block[(i << 3) + 0] <<  0
 			| (uint64_t)(uint8_t)block[(i << 3) + 1] <<  8
 			| (uint64_t)(uint8_t)block[(i << 3) + 2] << 16
 			| (uint64_t)(uint8_t)block[(i << 3) + 3] << 24

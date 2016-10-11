@@ -20,7 +20,7 @@ void sha512_compress_block(const jbyte *block, uint64_t state[8]) {
 		            | (uint64_t)(uint8_t)block[i * 8 + 4] << 24  \
 		            | (uint64_t)(uint8_t)block[i * 8 + 5] << 16  \
 		            | (uint64_t)(uint8_t)block[i * 8 + 6] <<  8  \
-		            | (uint64_t)(uint8_t)block[i * 8 + 7];
+		            | (uint64_t)(uint8_t)block[i * 8 + 7] <<  0;
 	
 	#define SCHEDULE(i)  \
 		schedule[i] = schedule[i - 16] + schedule[i - 7]  \

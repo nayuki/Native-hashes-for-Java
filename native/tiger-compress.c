@@ -280,15 +280,14 @@ static uint64_t T4[256] = {
 
 void tiger_compress_block(const jbyte *block, uint64_t state[3]) {
 	#define LOADSCHEDULE(i)  \
-		schedule[i] =  \
-			  (uint64_t)(uint8_t)block[i * 8 + 0]        \
-			| (uint64_t)(uint8_t)block[i * 8 + 1] <<  8  \
-			| (uint64_t)(uint8_t)block[i * 8 + 2] << 16  \
-			| (uint64_t)(uint8_t)block[i * 8 + 3] << 24  \
-			| (uint64_t)(uint8_t)block[i * 8 + 4] << 32  \
-			| (uint64_t)(uint8_t)block[i * 8 + 5] << 40  \
-			| (uint64_t)(uint8_t)block[i * 8 + 6] << 48  \
-			| (uint64_t)(uint8_t)block[i * 8 + 7] << 56;
+		schedule[i] = (uint64_t)(uint8_t)block[i * 8 + 0] <<  0  \
+		            | (uint64_t)(uint8_t)block[i * 8 + 1] <<  8  \
+		            | (uint64_t)(uint8_t)block[i * 8 + 2] << 16  \
+		            | (uint64_t)(uint8_t)block[i * 8 + 3] << 24  \
+		            | (uint64_t)(uint8_t)block[i * 8 + 4] << 32  \
+		            | (uint64_t)(uint8_t)block[i * 8 + 5] << 40  \
+		            | (uint64_t)(uint8_t)block[i * 8 + 6] << 48  \
+		            | (uint64_t)(uint8_t)block[i * 8 + 7] << 56;
 	
 	#define DOSCHEDULE()  \
 		schedule[0] -= schedule[7] ^ UINT64_C(0xA5A5A5A5A5A5A5A5);  \

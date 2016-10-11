@@ -11,11 +11,10 @@
 
 void md4_compress_block(const jbyte *block, uint32_t state[4]) {
 	#define LOADSCHEDULE(i)  \
-		schedule[i] =                                    \
-			  (uint32_t)(uint8_t)block[i * 4 + 0]        \
-			| (uint32_t)(uint8_t)block[i * 4 + 1] <<  8  \
-			| (uint32_t)(uint8_t)block[i * 4 + 2] << 16  \
-			| (uint32_t)(uint8_t)block[i * 4 + 3] << 24;
+		schedule[i] = (uint32_t)(uint8_t)block[i * 4 + 0] <<  0  \
+		            | (uint32_t)(uint8_t)block[i * 4 + 1] <<  8  \
+		            | (uint32_t)(uint8_t)block[i * 4 + 2] << 16  \
+		            | (uint32_t)(uint8_t)block[i * 4 + 3] << 24;
 	
 	uint32_t schedule[16];
 	LOADSCHEDULE( 0)

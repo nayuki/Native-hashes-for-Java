@@ -13,11 +13,10 @@ void sha256_compress_block(const jbyte *block, uint32_t state[8]) {
 	#define ROTR32(x, n)  (((x) << (32 - (n))) | ((x) >> (n)))  // Assumes that x is uint32_t and 0 < n < 32
 	
 	#define LOADSCHEDULE(i)  \
-		schedule[i] =                                    \
-			  (uint32_t)(uint8_t)block[i * 4 + 0] << 24  \
-			| (uint32_t)(uint8_t)block[i * 4 + 1] << 16  \
-			| (uint32_t)(uint8_t)block[i * 4 + 2] <<  8  \
-			| (uint32_t)(uint8_t)block[i * 4 + 3];
+		schedule[i] = (uint32_t)(uint8_t)block[i * 4 + 0] << 24  \
+		            | (uint32_t)(uint8_t)block[i * 4 + 1] << 16  \
+		            | (uint32_t)(uint8_t)block[i * 4 + 2] <<  8  \
+		            | (uint32_t)(uint8_t)block[i * 4 + 3] <<  0;
 	
 	#define SCHEDULE(i)  \
 		schedule[i] = schedule[i - 16] + schedule[i - 7]  \

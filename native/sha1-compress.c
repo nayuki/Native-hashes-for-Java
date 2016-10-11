@@ -13,11 +13,10 @@ void sha1_compress_block(const jbyte *block, uint32_t state[5]) {
 	#define ROTL32(x, n)  (((x) << (n)) | ((x) >> (32 - (n))))  // Assumes that x is uint32_t and 0 < n < 32
 	
 	#define LOADSCHEDULE(i)  \
-		schedule[i] =                                    \
-			  (uint32_t)(uint8_t)block[i * 4 + 0] << 24  \
-			| (uint32_t)(uint8_t)block[i * 4 + 1] << 16  \
-			| (uint32_t)(uint8_t)block[i * 4 + 2] <<  8  \
-			| (uint32_t)(uint8_t)block[i * 4 + 3];
+		schedule[i] = (uint32_t)(uint8_t)block[i * 4 + 0] << 24  \
+		            | (uint32_t)(uint8_t)block[i * 4 + 1] << 16  \
+		            | (uint32_t)(uint8_t)block[i * 4 + 2] <<  8  \
+		            | (uint32_t)(uint8_t)block[i * 4 + 3] <<  0;
 	
 	#define SCHEDULE(i)  \
 		temp = schedule[(i - 3) & 0xF] ^ schedule[(i - 8) & 0xF] ^ schedule[(i - 14) & 0xF] ^ schedule[(i - 16) & 0xF];  \
