@@ -50,10 +50,4 @@ public class Sha512 extends NativeBlockHasher {
 	
 	
 	private static native boolean compress(long[] state, byte[] msg, int off, int len);
-	
-	
-	static {
-		System.loadLibrary("nayuki-native-hashes");
-	}
-	
 }

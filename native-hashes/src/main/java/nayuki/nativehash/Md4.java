@@ -50,10 +50,4 @@ public class Md4 extends NativeBlockHasher {
 	
 	
 	private static native boolean compress(int[] state, byte[] msg, int off, int len);
-	
-	
-	static {
-		System.loadLibrary("nayuki-native-hashes");
-	}
-	
 }
