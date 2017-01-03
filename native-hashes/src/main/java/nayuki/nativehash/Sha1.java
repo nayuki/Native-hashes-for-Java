@@ -10,15 +10,15 @@ package nayuki.nativehash;
 import java.util.Arrays;
 
 
-public class Sha256 extends BlockHasher {
+public class Sha1 extends NativeBlockHasher {
 	
 	protected int[] state;
 	
 	
 	
-	public Sha256() {
+	public Sha1() {
 		super(64);
-		state = new int[]{0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A, 0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19};
+		state = new int[]{0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0};
 	}
 	
 	

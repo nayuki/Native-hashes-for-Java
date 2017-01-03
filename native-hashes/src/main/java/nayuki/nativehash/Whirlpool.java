@@ -10,15 +10,15 @@ package nayuki.nativehash;
 import java.util.Arrays;
 
 
-public class Sha1 extends BlockHasher {
+public class Whirlpool extends NativeBlockHasher {
 	
-	protected int[] state;
+	protected byte[] state;
 	
 	
 	
-	public Sha1() {
+	public Whirlpool() {
 		super(64);
-		state = new int[]{0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0};
+		state = new byte[64];
 	}
 	
 	
@@ -33,7 +33,7 @@ public class Sha1 extends BlockHasher {
 		block[blockFilled] = (byte)0x80;
 		blockFilled++;
 		Arrays.fill(block, blockFilled, block.length, (byte)0);
-		if (blockFilled + 8 > block.length) {
+		if (blockFilled + 32 > block.length) {
 			compress(block, 0, block.length);
 			Arrays.fill(block, (byte)0);
 		}
@@ -42,14 +42,11 @@ public class Sha1 extends BlockHasher {
 			block[block.length - 1 - i] = (byte)(length >>> (i * 8));
 		compress(block, 0, block.length);
 		
-		byte[] result = new byte[state.length * 4];
-		for (int i = 0; i < result.length; i++)
-			result[i] = (byte)(state[i / 4] >>> (24 - i % 4 * 8));
-		return result;
+		return state;
 	}
 	
 	
-	private static native boolean compress(int[] state, byte[] msg, int off, int len);
+	private static native boolean compress(byte[] state, byte[] msg, int off, int len);
 	
 	
 	static {

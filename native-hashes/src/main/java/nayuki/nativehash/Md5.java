@@ -10,15 +10,15 @@ package nayuki.nativehash;
 import java.util.Arrays;
 
 
-public class Ripemd160 extends BlockHasher {
+public class Md5 extends NativeBlockHasher {
 	
 	protected int[] state;
 	
 	
 	
-	public Ripemd160() {
+	public Md5() {
 		super(64);
-		state = new int[]{0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0};
+		state = new int[]{0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
 	}
 	
 	
@@ -50,10 +50,4 @@ public class Ripemd160 extends BlockHasher {
 	
 	
 	private static native boolean compress(int[] state, byte[] msg, int off, int len);
-	
-	
-	static {
-		System.loadLibrary("nayuki-native-hashes");
-	}
-	
 }

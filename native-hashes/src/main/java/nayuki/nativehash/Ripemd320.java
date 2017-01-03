@@ -10,15 +10,15 @@ package nayuki.nativehash;
 import java.util.Arrays;
 
 
-public class Md4 extends BlockHasher {
+public class Ripemd320 extends NativeBlockHasher {
 	
 	protected int[] state;
 	
 	
 	
-	public Md4() {
+	public Ripemd320() {
 		super(64);
-		state = new int[]{0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
+		state = new int[]{0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0, 0x76543210, 0xFEDCBA98, 0x89ABCDEF, 0x01234567, 0x3C2D1E0F};
 	}
 	
 	
