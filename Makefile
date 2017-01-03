@@ -8,19 +8,17 @@
 # ---- Library Definitions -->
 
 # Converts the architecture name as returned from uname -m to a format that
-# the JVM understands. ARCH is part of the platform string that the JVM
-# will look at when searching directories for a native library.
-ARCH=$(shell uname -m | sed -e 's/x86_64/x86-64/g' \
-                            -e 's/amd64/x86-64/g' \
-                            -e 's/i386/x86/g' \
-                            -e 's/i686/x86/g' \
-                            -e 's/powerpc/ppc/g' \
-                            -e 's/powerpc64/ppc64/g' \
-                            -e 's/^arm.*/arm/g')
+# the JVM understands. ARCH is part of the string that the Native Library
+# loader will use to determine the path of the JNI library.
+ARCH := $(shell uname -m | sed -e 's/x86_64/64/g' \
+                            -e 's/amd64/64/g' \
+                            -e 's/i386/32/g' \
+                            -e 's/i686/32/g')
 
 # Like architecture the JVM has set of predefined OS names, so we need to convert
-# the value output from uname to something that the JVM understands.
-OS=$(shell uname | sed -e 's/CYGWIN.*/win32/g' \
+# the value output from uname to something that the JVM understands. This value
+# is used for identifying the OS specific directory on the JNI include path.
+OS := $(shell uname | sed -e 's/CYGWIN.*/win32/g' \
                        -e 's/MINGW32.*/win32/g' \
                        -e 's/SunOS.*/sunos/g' \
                        -e 's/NetBSD/netbsd/g' \
@@ -31,21 +29,22 @@ OS=$(shell uname | sed -e 's/CYGWIN.*/win32/g' \
                        -e 's/AIX.*/aix/g' \
                        -e 's/Linux.*/linux/g')
 
+PLATFORM_OS := $(shell echo "$(OS)" | sed -e 's/darwin/osx/g')
+
 # The filename for the shared library that was created differs based on the
 # platform, so we conditionally set it below.
 ifeq ($(OS), darwin)
 	NATIVE_HASH_LIB := ./libnayuki-native-hashes.dylib
-	PLATFORM := $(OS)
-else ifeq ($(OS)-$(ARCH), sunos-i86pc)
+else ifeq $(OS), sunos)
 	# uname -m doesn't give us a coherent answer for Solaris platforms, so
-	# we have to do an additional inspection
-	ARCH := $(shell isainfo -b | sed -e 's/64/x86-64/g' -e 's/32/x86/g')
-        NATIVE_HASH_LIB := ./libnayuki-native-hashes.so
-        PLATFORM := $(OS)-$(ARCH)
+	# we have to do an additional inspection to figure out if we are 32/64 bit
+	ARCH := $(shell isainfo -b)
+    NATIVE_HASH_LIB := ./libnayuki-native-hashes.so
 else
 	NATIVE_HASH_LIB := ./libnayuki-native-hashes.so
-	PLATFORM := $(OS)-$(ARCH)
 endif
+
+$(info Detected OS: ${OS}-${ARCH})
 
 # ---- Configuration ----
 
@@ -57,9 +56,11 @@ CC = gcc
 
 # Find JAVA_HOME if it isn't explicitly defined
 JAVA_HOME ?= $(shell jrunscript -e 'java.lang.System.out.println(new java.io.File(java.lang.System.getProperty("java.home")).getParent());')
+$(info Using JAVA_HOME: ${JAVA_HOME})
 
 # Where to find jni.h
 JAVA_INCLUDE_PATH := $(JAVA_HOME)/include
+# Where to find the OS specific headers
 JAVA_NATIVE_INCLUDE_PATH := $(JAVA_INCLUDE_PATH)/$(OS)
 
 # ---- Source files ----
@@ -123,14 +124,24 @@ SRC_FILES = $(foreach name, $(SRC_FILENAMES), native/$(name))
 
 # ---- Rules ----
 
-all: $(NATIVE_HASH_LIB)
+all: $(NATIVE_HASH_LIB) install-lib java
 
+# Builds the native library
 $(NATIVE_HASH_LIB):
 	mkdir -p out
-	@echo "Using JAVA_HOME: $(JAVA_HOME)"
 	$(CC) -Wall -I $(JAVA_INCLUDE_PATH) -I $(JAVA_NATIVE_INCLUDE_PATH) -shared -fPIC -O1 -o out/$@ $(SRC_FILES)
 
 clean:
 	rm -rf out
+	JAVA_HOME=$(JAVA_HOME) mvn -q clean
+
+# Installs the native library into the Java project so that it can be embedded
+install-lib:
+	mkdir -p native-hashes/src/main/resources/META-INF/lib/$(PLATFORM_OS)_$(ARCH)
+	cp -v out/$(NATIVE_HASH_LIB) native-hashes/src/main/resources/META-INF/lib/$(PLATFORM_OS)_$(ARCH)/
+
+# Builds the Java library
+java:
+	JAVA_HOME=$(JAVA_HOME) mvn -q package
 
 .PHONY: $(NATIVE_HASH_LIB) clean
