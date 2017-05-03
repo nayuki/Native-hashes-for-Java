@@ -11,11 +11,10 @@
 # Available modes: c, x86, x86-64
 MODE = c
 
-# C compiler
-CC = gcc
-
-# Where to find jni.h
-JAVA_INCLUDE_PATH = /usr/lib/jvm/java-1.6.0-openjdk/include/
+CFLAGS += -I /usr/lib/jvm/java-1.8.0-openjdk-amd64/include/
+CFLAGS += -I /usr/lib/jvm/java-1.8.0-openjdk-amd64/include/linux/
+CFLAGS += -Wall
+CFLAGS += -O1
 
 
 # ---- Source files ----
@@ -84,7 +83,7 @@ LIBFILE = libnayuki-native-hashes.so
 all: $(LIBFILE) classes
 
 $(LIBFILE): $(SRC_FILES)
-	$(CC) -Wall -I $(JAVA_INCLUDE_PATH) -shared -fPIC -O1 -o $@ $(SRC_FILES)
+	$(CC) $(CFLAGS) -shared -fPIC -o $@ $(SRC_FILES)
 
 classes: java/bin
 	cd java/src ; javac -cp ../bin -d ../bin nayuki/nativehash/*.java
