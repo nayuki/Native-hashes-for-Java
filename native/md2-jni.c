@@ -20,20 +20,19 @@ extern void md2_compress_block(const jbyte *block, uint8_t state[STATE_LEN], uin
  * Signature: ([B[B[BII)Z
  */
 JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Md2_compress(JNIEnv *env, jclass thisClass, jbyteArray stateArray, jbyteArray checksumArray, jbyteArray msg, jint off, jint len) {
+	jboolean status = JNI_FALSE;
 	if (len < 0 || (len & 15) != 0)  // Block size is 16 bytes
-		return JNI_FALSE;
+		goto cleanup0;
 	JNIEnv theEnv = *env;
 	(void)thisClass;
 	
 	// Get state and checksum arrays and convert to uint8_t
 	jbyte *stateJava = theEnv->GetByteArrayElements(env, stateArray, NULL);
 	if (stateJava == NULL)
-		return JNI_FALSE;
+		goto cleanup0;
 	jbyte *checksumJava = theEnv->GetByteArrayElements(env, checksumArray, NULL);
-	if (checksumJava == NULL) {
-		theEnv->ReleaseByteArrayElements(env, stateArray, stateJava, 0);
-		return JNI_FALSE;
-	}
+	if (checksumJava == NULL)
+		goto cleanup1;
 	uint8_t state[STATE_LEN];
 	uint8_t checksum[CHECKSUM_LEN];
 	for (int i = 0; i < STATE_LEN; i++)
@@ -44,7 +43,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Md2_compress(JNIEnv *env, jcla
 	// Iterate over each block in msg
 	jbyte *block = theEnv->GetPrimitiveArrayCritical(env, msg, NULL);
 	if (block == NULL)
-		return JNI_FALSE;
+		goto cleanup2;
 	for (jint end = off + len; off < end; off += 16)
 		md2_compress_block(&block[off], state, checksum);
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
@@ -54,7 +53,11 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Md2_compress(JNIEnv *env, jcla
 		stateJava[i] = (jbyte)state[i];
 	for (int i = 0; i < CHECKSUM_LEN; i++)
 		checksumJava[i] = (jbyte)checksum[i];
+	status = JNI_TRUE;
+cleanup2:
 	theEnv->ReleaseByteArrayElements(env, stateArray, stateJava, 0);
+cleanup1:
 	theEnv->ReleaseByteArrayElements(env, checksumArray, checksumJava, 0);
-	return JNI_TRUE;
+cleanup0:
+	return status;
 }
