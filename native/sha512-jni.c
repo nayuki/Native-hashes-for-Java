@@ -36,10 +36,8 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Sha512_compress(JNIEnv *env, j
 	jbyte *block = theEnv->GetPrimitiveArrayCritical(env, msg, NULL);
 	if (block == NULL)
 		return JNI_FALSE;
-	size_t newoff;
-	size_t newlen = len;
-	for (newoff = 0; newoff < newlen; newoff += 128)
-		sha512_compress_block(block + off + newoff, state);
+	for (jint end = off + len; off < end; off += 128)
+		sha512_compress_block(&block[off], state);
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	
 	// Convert state array to jlong and clean up

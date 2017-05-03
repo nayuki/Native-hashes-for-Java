@@ -45,10 +45,8 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Md2_compress(JNIEnv *env, jcla
 	jbyte *block = theEnv->GetPrimitiveArrayCritical(env, msg, NULL);
 	if (block == NULL)
 		return JNI_FALSE;
-	size_t newoff;
-	size_t newlen = len;
-	for (newoff = 0; newoff < newlen; newoff += 16)
-		md2_compress_block(block + off + newoff, state, checksum);
+	for (jint end = off + len; off < end; off += 16)
+		md2_compress_block(&block[off], state, checksum);
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	
 	// Convert state and checksum arrays to jbyte and clean up
