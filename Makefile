@@ -1,7 +1,7 @@
 # 
 # Native hash functions for Java
 # 
-# Copyright (c) Project Nayuki
+# Copyright (c) Project Nayuki. (MIT License)
 # https://www.nayuki.io/page/native-hash-functions-for-java
 # 
 
