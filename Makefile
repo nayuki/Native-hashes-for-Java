@@ -85,9 +85,9 @@ libnayuki-native-hashes.so:
 	$(CC) -Wall -I $(JAVA_INCLUDE_PATH) -shared -fPIC -O1 -o $@ $(SRC_FILES)
 
 classes: java/bin
-	cd java/src; javac -d ../bin nayuki/nativehash/*.java
+	cd java/src ; javac -cp ../bin -d ../bin nayuki/nativehash/*.java
 	cd java/test; javac -cp ../bin -d ../bin nayuki/nativehash/*.java
-	cd java/demo; javac -cp ../bin -d ../bin *.java nayuki/nativehash/*.java
+	cd java/demo; javac -cp ../bin -d ../bin nayuki/nativehash/*.java *.java
 
 java/bin:
 	mkdir $@
