@@ -28,9 +28,8 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Ripemd256_compress(JNIEnv *env
 	jint *stateJava = theEnv->GetIntArrayElements(env, stateArray, NULL);
 	if (stateJava == NULL)
 		return JNI_FALSE;
-	unsigned int i;
 	uint32_t state[STATE_LEN];
-	for (i = 0; i < STATE_LEN; i++)
+	for (int i = 0; i < STATE_LEN; i++)
 		state[i] = (uint32_t)stateJava[i];
 	
 	// Iterate over each block in msg
@@ -44,7 +43,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Ripemd256_compress(JNIEnv *env
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	
 	// Convert state array to jint and clean up
-	for (i = 0; i < STATE_LEN; i++)
+	for (int i = 0; i < STATE_LEN; i++)
 		stateJava[i] = (jint)state[i];
 	theEnv->ReleaseIntArrayElements(env, stateArray, stateJava, 0);
 	return JNI_TRUE;

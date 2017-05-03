@@ -34,12 +34,11 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Md2_compress(JNIEnv *env, jcla
 		theEnv->ReleaseByteArrayElements(env, stateArray, stateJava, 0);
 		return JNI_FALSE;
 	}
-	unsigned int i;
 	uint8_t state[STATE_LEN];
 	uint8_t checksum[CHECKSUM_LEN];
-	for (i = 0; i < STATE_LEN; i++)
+	for (int i = 0; i < STATE_LEN; i++)
 		state[i] = (uint8_t)stateJava[i];
-	for (i = 0; i < CHECKSUM_LEN; i++)
+	for (int i = 0; i < CHECKSUM_LEN; i++)
 		checksum[i] = (uint8_t)checksumJava[i];
 	
 	// Iterate over each block in msg
@@ -53,9 +52,9 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Md2_compress(JNIEnv *env, jcla
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	
 	// Convert state and checksum arrays to jbyte and clean up
-	for (i = 0; i < STATE_LEN; i++)
+	for (int i = 0; i < STATE_LEN; i++)
 		stateJava[i] = (jbyte)state[i];
-	for (i = 0; i < CHECKSUM_LEN; i++)
+	for (int i = 0; i < CHECKSUM_LEN; i++)
 		checksumJava[i] = (jbyte)checksum[i];
 	theEnv->ReleaseByteArrayElements(env, stateArray, stateJava, 0);
 	theEnv->ReleaseByteArrayElements(env, checksumArray, checksumJava, 0);

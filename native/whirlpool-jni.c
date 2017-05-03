@@ -28,9 +28,8 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Whirlpool_compress(JNIEnv *env
 	jbyte *stateJava = theEnv->GetByteArrayElements(env, stateArray, NULL);
 	if (stateJava == NULL)
 		return JNI_FALSE;
-	unsigned int i;
 	uint8_t state[STATE_LEN];
-	for (i = 0; i < STATE_LEN; i++)
+	for (int i = 0; i < STATE_LEN; i++)
 		state[i] = (uint8_t)stateJava[i];
 	
 	// Iterate over each block in msg
@@ -44,7 +43,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Whirlpool_compress(JNIEnv *env
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	
 	// Convert state array to jbyte and clean up
-	for (i = 0; i < STATE_LEN; i++)
+	for (int i = 0; i < STATE_LEN; i++)
 		stateJava[i] = (jbyte)state[i];
 	theEnv->ReleaseByteArrayElements(env, stateArray, stateJava, 0);
 	return JNI_TRUE;

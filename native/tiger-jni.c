@@ -28,9 +28,8 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Tiger_compress(JNIEnv *env, jc
 	jlong *stateJava = theEnv->GetLongArrayElements(env, stateArray, NULL);
 	if (stateJava == NULL)
 		return JNI_FALSE;
-	unsigned int i;
 	uint64_t state[STATE_LEN];
-	for (i = 0; i < STATE_LEN; i++)
+	for (int i = 0; i < STATE_LEN; i++)
 		state[i] = (uint64_t)stateJava[i];
 	
 	// Iterate over each block in msg
@@ -44,7 +43,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Tiger_compress(JNIEnv *env, jc
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	
 	// Convert state array to jlong and clean up
-	for (i = 0; i < STATE_LEN; i++)
+	for (int i = 0; i < STATE_LEN; i++)
 		stateJava[i] = (jlong)state[i];
 	theEnv->ReleaseLongArrayElements(env, stateArray, stateJava, 0);
 	return JNI_TRUE;
