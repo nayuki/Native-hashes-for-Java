@@ -79,9 +79,11 @@ SRC_FILES = $(foreach name, $(SRC_FILENAMES), native/$(name))
 
 # ---- Rules ----
 
-all: libnayuki-native-hashes.so classes
+LIBFILE = libnayuki-native-hashes.so
 
-libnayuki-native-hashes.so:
+all: $(LIBFILE) classes
+
+$(LIBFILE): $(SRC_FILES)
 	$(CC) -Wall -I $(JAVA_INCLUDE_PATH) -shared -fPIC -O1 -o $@ $(SRC_FILES)
 
 classes: java/bin
@@ -93,7 +95,7 @@ java/bin:
 	mkdir $@
 
 clean:
-	rm -f libnayuki-native-hashes.so
+	rm -f $(LIBFILE)
 	rm -rf java/bin
 
-.PHONY: libnayuki-native-hashes.so classes clean
+.PHONY: classes clean
