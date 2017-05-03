@@ -19,6 +19,7 @@ CFLAGS += -O1
 
 # ---- Source files ----
 
+# JNI functions
 SRC_FILENAMES =  \
     md2-jni.c        \
     md4-jni.c        \
@@ -33,6 +34,7 @@ SRC_FILENAMES =  \
     tiger-jni.c      \
     whirlpool-jni.c
 
+# Compression functions for various modes
 ifeq "$(MODE)" "c"
     SRC_FILENAMES += \
         md4-compress.c        \
@@ -67,6 +69,7 @@ else
     $(error Invalid mode "$(MODE)")
 endif
 
+# Compressions functions only available in C
 SRC_FILENAMES += \
     md2-compress.c        \
     ripemd256-compress.c  \
