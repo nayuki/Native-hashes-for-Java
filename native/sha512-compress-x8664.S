@@ -85,7 +85,7 @@ sha512_compress_block:
 		andq  %e, %rcx;    \
 		xorq  %g, %rcx;    \
 		addq  %rax, %h;    \
-		movq  $k, %rax;    \
+		movabs  $k, %rax;  \
 		addq  %rcx, %h;    \
 		addq  %rax, %h;    \
 		/* Part 1 */       \
