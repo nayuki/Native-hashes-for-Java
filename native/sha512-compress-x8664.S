@@ -28,13 +28,13 @@ sha512_compress_block:
 	 *       8  r14       SHA-512 state variable G
 	 *       8  r15       SHA-512 state variable H
 	 *     128  [rsp+0]   Circular buffer of most recent 16 key schedule items, 8 bytes each
-	 *      16  xmm0      Caller's value of r10 (only lower 64 bits are used)
-	 *      16  xmm1      Caller's value of r11 (only lower 64 bits are used)
-	 *      16  xmm2      Caller's value of r12 (only lower 64 bits are used)
-	 *      16  xmm3      Caller's value of r13 (only lower 64 bits are used)
-	 *      16  xmm4      Caller's value of r14 (only lower 64 bits are used)
-	 *      16  xmm5      Caller's value of r15 (only lower 64 bits are used)
-	 *      16  xmm6      Caller's value of rbx (only lower 64 bits are used)
+	 *      16  xmm0      Caller's value of r10 (only low 64 bits are used)
+	 *      16  xmm1      Caller's value of r11 (only low 64 bits are used)
+	 *      16  xmm2      Caller's value of r12 (only low 64 bits are used)
+	 *      16  xmm3      Caller's value of r13 (only low 64 bits are used)
+	 *      16  xmm4      Caller's value of r14 (only low 64 bits are used)
+	 *      16  xmm5      Caller's value of r15 (only low 64 bits are used)
+	 *      16  xmm6      Caller's value of rbx (only low 64 bits are used)
 	 */
 	
 	#define SCHED(i)  (((i)&0xF)*8)(%rsp)
