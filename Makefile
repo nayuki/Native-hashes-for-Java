@@ -35,11 +35,11 @@ PLATFORM_OS := $(shell echo "$(OS)" | sed -e 's/darwin/osx/g')
 # platform, so we conditionally set it below.
 ifeq ($(OS), darwin)
 	LIBFILE := ./libnayuki-native-hashes.dylib
-else ifeq $(OS), sunos)
+else ifeq ($(OS), sunos)
 	# uname -m doesn't give us a coherent answer for Solaris platforms, so
 	# we have to do an additional inspection to figure out if we are 32/64 bit
 	ARCH := $(shell isainfo -b)
-    LIBFILE := ./libnayuki-native-hashes.so
+	LIBFILE := ./libnayuki-native-hashes.so
 else
 	LIBFILE := ./libnayuki-native-hashes.so
 endif
@@ -63,11 +63,11 @@ JAVA_INCLUDE_PATH := $(JAVA_HOME)/include
 # Where to find the OS specific headers
 JAVA_NATIVE_INCLUDE_PATH := $(JAVA_INCLUDE_PATH)/$(OS)
 
-CFLAGS += -I /usr/lib/jvm/java-1.8.0-openjdk-amd64/include/
-CFLAGS += -I /usr/lib/jvm/java-1.8.0-openjdk-amd64/include/linux/
+CFLAGS += -I $(JAVA_INCLUDE_PATH)
+CFLAGS += -I $(JAVA_NATIVE_INCLUDE_PATH)
 CFLAGS += -Wall
 CFLAGS += -O1
-
+CFLAGS += -std=c99
 
 # ---- Source files ----
 
@@ -133,11 +133,11 @@ SRC_FILES = $(foreach name, $(SRC_FILENAMES), native/$(name))
 
 # ---- Rules ----
 
-all: $(LIBFILE) classes
+all: $(LIBFILE) install-lib java
 
 $(LIBFILE): $(SRC_FILES)
 	mkdir -p out
-	$(CC) -Wall -I $(JAVA_INCLUDE_PATH) -I $(JAVA_NATIVE_INCLUDE_PATH) -shared -fPIC -o out/$@ $(SRC_FILES)
+	$(CC) $(CFLAGS) -shared -fPIC -o out/$@ $(SRC_FILES)
 
 clean:
 	rm -rf out
@@ -146,7 +146,7 @@ clean:
 # Installs the native library into the Java project so that it can be embedded
 install-lib:
 	mkdir -p native-hashes/src/main/resources/META-INF/lib/$(PLATFORM_OS)_$(ARCH)
-	cp -v out/$(NATIVE_HASH_LIB) native-hashes/src/main/resources/META-INF/lib/$(PLATFORM_OS)_$(ARCH)/
+	cp -v out/$(LIBFILE) native-hashes/src/main/resources/META-INF/lib/$(PLATFORM_OS)_$(ARCH)/
 
 # Builds the Java library
 java:
