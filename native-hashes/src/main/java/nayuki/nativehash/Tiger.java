@@ -10,15 +10,17 @@ package nayuki.nativehash;
 import java.util.Arrays;
 
 
-public class Ripemd128 extends BlockHasher {
+public class Tiger extends NativeBlockHasher {
 	
-	protected int[] state;
+	protected long[] state;
+	protected byte padding;
 	
 	
 	
-	public Ripemd128() {
+	public Tiger() {
 		super(64);
-		state = new int[]{0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
+		state = new long[]{0x0123456789ABCDEFL, 0xFEDCBA9876543210L, 0xF096A5B4C3B2E187L};
+		padding = 0x01;
 	}
 	
 	
@@ -30,7 +32,7 @@ public class Ripemd128 extends BlockHasher {
 	
 	
 	protected byte[] getHashDestructively() {
-		block[blockFilled] = (byte)0x80;
+		block[blockFilled] = padding;
 		blockFilled++;
 		Arrays.fill(block, blockFilled, block.length, (byte)0);
 		if (blockFilled + 8 > block.length) {
@@ -42,18 +44,12 @@ public class Ripemd128 extends BlockHasher {
 			block[block.length - 8 + i] = (byte)(length >>> (i * 8));
 		compress(block, 0, block.length);
 		
-		byte[] result = new byte[state.length * 4];
+		byte[] result = new byte[state.length * 8];
 		for (int i = 0; i < result.length; i++)
-			result[i] = (byte)(state[i / 4] >>> (i % 4 * 8));
+			result[i] = (byte)(state[i / 8] >>> (i % 8 * 8));
 		return result;
 	}
 	
 	
-	private static native boolean compress(int[] state, byte[] msg, int off, int len);
-	
-	
-	static {
-		System.loadLibrary("nayuki-native-hashes");
-	}
-	
+	private static native boolean compress(long[] state, byte[] msg, int off, int len);
 }

@@ -1,21 +1,73 @@
-# 
+#
 # Native hash functions for Java
-# 
+#
 # Copyright (c) Project Nayuki. (MIT License)
 # https://www.nayuki.io/page/native-hash-functions-for-java
-# 
+#
 
+# ---- Library Definitions -->
+
+# Converts the architecture name as returned from uname -m to a format that
+# the JVM understands. ARCH is part of the string that the Native Library
+# loader will use to determine the path of the JNI library.
+ARCH := $(shell uname -m | sed -e 's/x86_64/64/g' \
+                            -e 's/amd64/64/g' \
+                            -e 's/i386/32/g' \
+                            -e 's/i686/32/g')
+
+# Like architecture the JVM has set of predefined OS names, so we need to convert
+# the value output from uname to something that the JVM understands. This value
+# is used for identifying the OS specific directory on the JNI include path.
+OS := $(shell uname | sed -e 's/CYGWIN.*/win32/g' \
+                       -e 's/MINGW32.*/win32/g' \
+                       -e 's/SunOS.*/sunos/g' \
+                       -e 's/NetBSD/netbsd/g' \
+                       -e 's/GNU\/kFreeBSD/kfreebsd/g' \
+                       -e 's/FreeBSD/freebsd/g' \
+                       -e 's/OpenBSD/openbsd/g' \
+                       -e 's/Darwin.*/darwin/g' \
+                       -e 's/AIX.*/aix/g' \
+                       -e 's/Linux.*/linux/g')
+
+PLATFORM_OS := $(shell echo "$(OS)" | sed -e 's/darwin/osx/g')
+
+# The filename for the shared library that was created differs based on the
+# platform, so we conditionally set it below.
+ifeq ($(OS), darwin)
+	LIBFILE := ./libnayuki-native-hashes.dylib
+else ifeq ($(OS), sunos)
+	# uname -m doesn't give us a coherent answer for Solaris platforms, so
+	# we have to do an additional inspection to figure out if we are 32/64 bit
+	ARCH := $(shell isainfo -b)
+	LIBFILE := ./libnayuki-native-hashes.so
+else
+	LIBFILE := ./libnayuki-native-hashes.so
+endif
+
+$(info Detected OS: ${OS}-${ARCH})
 
 # ---- Configuration ----
 
 # Available modes: c, x86, x86-64
 MODE = c
 
-CFLAGS += -I /usr/lib/jvm/java-1.8.0-openjdk-amd64/include/
-CFLAGS += -I /usr/lib/jvm/java-1.8.0-openjdk-amd64/include/linux/
+# C compiler
+CC = gcc
+
+# Find JAVA_HOME if it isn't explicitly defined
+JAVA_HOME ?= $(shell jrunscript -e 'java.lang.System.out.println(new java.io.File(java.lang.System.getProperty("java.home")).getParent());')
+$(info Using JAVA_HOME: ${JAVA_HOME})
+
+# Where to find jni.h
+JAVA_INCLUDE_PATH := $(JAVA_HOME)/include
+# Where to find the OS specific headers
+JAVA_NATIVE_INCLUDE_PATH := $(JAVA_INCLUDE_PATH)/$(OS)
+
+CFLAGS += -I $(JAVA_INCLUDE_PATH)
+CFLAGS += -I $(JAVA_NATIVE_INCLUDE_PATH)
 CFLAGS += -Wall
 CFLAGS += -O1
-
+CFLAGS += -std=c99
 
 # ---- Source files ----
 
@@ -81,23 +133,23 @@ SRC_FILES = $(foreach name, $(SRC_FILENAMES), native/$(name))
 
 # ---- Rules ----
 
-LIBFILE = libnayuki-native-hashes.so
-
-all: $(LIBFILE) classes
+all: $(LIBFILE) install-lib java
 
 $(LIBFILE): $(SRC_FILES)
-	$(CC) $(CFLAGS) -shared -fPIC -o $@ $(SRC_FILES)
-
-classes: java/bin
-	cd java/src ; javac -cp ../bin -d ../bin nayuki/nativehash/*.java
-	cd java/test; javac -cp ../bin -d ../bin nayuki/nativehash/*.java
-	cd java/demo; javac -cp ../bin -d ../bin nayuki/nativehash/*.java *.java
-
-java/bin:
-	mkdir $@
+	mkdir -p out
+	$(CC) $(CFLAGS) -shared -fPIC -o out/$@ $(SRC_FILES)
 
 clean:
-	rm -f $(LIBFILE)
-	rm -rf java/bin
+	rm -rf out
+	JAVA_HOME=$(JAVA_HOME) mvn -q clean
 
-.PHONY: classes clean
+# Installs the native library into the Java project so that it can be embedded
+install-lib:
+	mkdir -p native-hashes/src/main/resources/META-INF/lib/$(PLATFORM_OS)_$(ARCH)
+	cp -v out/$(LIBFILE) native-hashes/src/main/resources/META-INF/lib/$(PLATFORM_OS)_$(ARCH)/
+
+# Builds the Java library
+java:
+	JAVA_HOME=$(JAVA_HOME) mvn -q package
+
+.PHONY: $(LIBFILE) clean

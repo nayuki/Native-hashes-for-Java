@@ -10,7 +10,7 @@ package nayuki.nativehash;
 import java.util.Arrays;
 
 
-public class Md2 extends BlockHasher {
+public class Md2 extends NativeBlockHasher {
 	
 	protected byte[] state;
 	protected byte[] checksum;
@@ -45,10 +45,4 @@ public class Md2 extends BlockHasher {
 	
 	
 	private static native boolean compress(byte[] state, byte[] checksum, byte[] msg, int off, int len);
-	
-	
-	static {
-		System.loadLibrary("nayuki-native-hashes");
-	}
-	
 }

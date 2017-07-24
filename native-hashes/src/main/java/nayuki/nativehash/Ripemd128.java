@@ -10,15 +10,15 @@ package nayuki.nativehash;
 import java.util.Arrays;
 
 
-public class Sha256 extends BlockHasher {
+public class Ripemd128 extends NativeBlockHasher {
 	
 	protected int[] state;
 	
 	
 	
-	public Sha256() {
+	public Ripemd128() {
 		super(64);
-		state = new int[]{0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A, 0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19};
+		state = new int[]{0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
 	}
 	
 	
@@ -39,21 +39,15 @@ public class Sha256 extends BlockHasher {
 		}
 		length = length << 3;
 		for (int i = 0; i < 8; i++)
-			block[block.length - 1 - i] = (byte)(length >>> (i * 8));
+			block[block.length - 8 + i] = (byte)(length >>> (i * 8));
 		compress(block, 0, block.length);
 		
 		byte[] result = new byte[state.length * 4];
 		for (int i = 0; i < result.length; i++)
-			result[i] = (byte)(state[i / 4] >>> (24 - i % 4 * 8));
+			result[i] = (byte)(state[i / 4] >>> (i % 4 * 8));
 		return result;
 	}
 	
 	
 	private static native boolean compress(int[] state, byte[] msg, int off, int len);
-	
-	
-	static {
-		System.loadLibrary("nayuki-native-hashes");
-	}
-	
 }

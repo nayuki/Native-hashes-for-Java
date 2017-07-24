@@ -10,15 +10,15 @@ package nayuki.nativehash;
 import java.util.Arrays;
 
 
-public class Sha1 extends BlockHasher {
+public class Sha512 extends NativeBlockHasher {
 	
-	protected int[] state;
+	protected long[] state;
 	
 	
 	
-	public Sha1() {
-		super(64);
-		state = new int[]{0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0};
+	public Sha512() {
+		super(128);
+		state = new long[]{0x6A09E667F3BCC908L, 0xBB67AE8584CAA73BL, 0x3C6EF372FE94F82BL, 0xA54FF53A5F1D36F1L, 0x510E527FADE682D1L, 0x9B05688C2B3E6C1FL, 0x1F83D9ABFB41BD6BL, 0x5BE0CD19137E2179L};
 	}
 	
 	
@@ -33,7 +33,7 @@ public class Sha1 extends BlockHasher {
 		block[blockFilled] = (byte)0x80;
 		blockFilled++;
 		Arrays.fill(block, blockFilled, block.length, (byte)0);
-		if (blockFilled + 8 > block.length) {
+		if (blockFilled + 16 > block.length) {
 			compress(block, 0, block.length);
 			Arrays.fill(block, (byte)0);
 		}
@@ -42,18 +42,12 @@ public class Sha1 extends BlockHasher {
 			block[block.length - 1 - i] = (byte)(length >>> (i * 8));
 		compress(block, 0, block.length);
 		
-		byte[] result = new byte[state.length * 4];
+		byte[] result = new byte[state.length * 8];
 		for (int i = 0; i < result.length; i++)
-			result[i] = (byte)(state[i / 4] >>> (24 - i % 4 * 8));
+			result[i] = (byte)(state[i / 8] >>> (56 - i % 8 * 8));
 		return result;
 	}
 	
 	
-	private static native boolean compress(int[] state, byte[] msg, int off, int len);
-	
-	
-	static {
-		System.loadLibrary("nayuki-native-hashes");
-	}
-	
+	private static native boolean compress(long[] state, byte[] msg, int off, int len);
 }

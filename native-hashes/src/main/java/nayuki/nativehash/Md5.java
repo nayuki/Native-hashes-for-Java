@@ -10,15 +10,15 @@ package nayuki.nativehash;
 import java.util.Arrays;
 
 
-public class Whirlpool extends BlockHasher {
+public class Md5 extends NativeBlockHasher {
 	
-	protected byte[] state;
+	protected int[] state;
 	
 	
 	
-	public Whirlpool() {
+	public Md5() {
 		super(64);
-		state = new byte[64];
+		state = new int[]{0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
 	}
 	
 	
@@ -33,24 +33,21 @@ public class Whirlpool extends BlockHasher {
 		block[blockFilled] = (byte)0x80;
 		blockFilled++;
 		Arrays.fill(block, blockFilled, block.length, (byte)0);
-		if (blockFilled + 32 > block.length) {
+		if (blockFilled + 8 > block.length) {
 			compress(block, 0, block.length);
 			Arrays.fill(block, (byte)0);
 		}
 		length = length << 3;
 		for (int i = 0; i < 8; i++)
-			block[block.length - 1 - i] = (byte)(length >>> (i * 8));
+			block[block.length - 8 + i] = (byte)(length >>> (i * 8));
 		compress(block, 0, block.length);
 		
-		return state;
+		byte[] result = new byte[state.length * 4];
+		for (int i = 0; i < result.length; i++)
+			result[i] = (byte)(state[i / 4] >>> (i % 4 * 8));
+		return result;
 	}
 	
 	
-	private static native boolean compress(byte[] state, byte[] msg, int off, int len);
-	
-	
-	static {
-		System.loadLibrary("nayuki-native-hashes");
-	}
-	
+	private static native boolean compress(int[] state, byte[] msg, int off, int len);
 }

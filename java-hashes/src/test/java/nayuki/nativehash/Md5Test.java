@@ -13,7 +13,7 @@ public final class Md5Test extends HashTest {
 	public static void main(String[] args) {
 		new Md5Test().run();
 	}
-	
+
 	
 	protected BlockHasher newHasher(boolean useNative) {
 		return useNative ? new Md5() : new Md5Java();

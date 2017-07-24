@@ -10,7 +10,7 @@ package nayuki.nativehash;
 import java.util.Arrays;
 
 
-public class Ripemd160 extends BlockHasher {
+public class Ripemd160 extends NativeBlockHasher {
 	
 	protected int[] state;
 	
@@ -50,10 +50,4 @@ public class Ripemd160 extends BlockHasher {
 	
 	
 	private static native boolean compress(int[] state, byte[] msg, int off, int len);
-	
-	
-	static {
-		System.loadLibrary("nayuki-native-hashes");
-	}
-	
 }
