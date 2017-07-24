@@ -1,7 +1,7 @@
 /* 
  * Native hash functions for Java
  * 
- * Copyright (c) Project Nayuki
+ * Copyright (c) Project Nayuki. (MIT License)
  * https://www.nayuki.io/page/native-hash-functions-for-java
  */
 
@@ -14,12 +14,12 @@ whirlpool_compress_block:
 	 * Storage usage:
 	 *   Bytes  Location    Description
 	 *       8  rax         Temporary 16-bit value for each pair of bytes processed during a round
-	 *       8  rbx         Base address of magictable0
-	 *       8  rcx         Upward loop counter for 10 rounds
 	 *       8  rdx         Temporary byte value
+	 *       8  rcx         Upward loop counter for 10 rounds
 	 *       8  rsi         Base address of state array argument (read-only)
 	 *       8  rdi         Base address of block array argument (read-only)
-	 *       8  rbp         Base address of magictable1
+	 *       8  rbx         Base address of magictable0 array (read-only)
+	 *       8  rbp         Base address of magictable1 array (read-only)
 	 *       8  rsp         x86-64 stack pointer
 	 *      64  r8..r15     Output rows for current round being computed, in little endian (8 bytes per register)
 	 *      64  xmm0..xmm3  All contents of current state array, in little endian (16 bytes per register)
@@ -79,10 +79,6 @@ whirlpool_compress_block:
 	pushq   %r15
 	subq    $8, %rsp
 	
-	/* Load table addresses */
-	leaq    .magictable0(%rip), %rbx
-	leaq    .magictable1(%rip), %rbp
-	
 	/* Load state into XMM */
 	movdqu   0(%rsi), %xmm0
 	movdqu  16(%rsi), %xmm1
@@ -97,6 +93,10 @@ whirlpool_compress_block:
 	
 	/* XOR block with state */
 	XOR_XMM0_3_TO_XMM4_7()
+	
+	/* Load table addresses */
+	leaq    .magictable0(%rip), %rbx
+	leaq    .magictable1(%rip), %rbp
 	
 	/* Do 10 rounds */
 	movl    $0, %ecx
@@ -139,7 +139,8 @@ whirlpool_compress_block:
 	DOBYTEPAIR(xmm3, 7, r13, r14)
 	DOBYTEPAIR(xmm0, 7, r15, r8 )
 	ROTATERIGHT()
-	xorq    -256(%rbx,%rcx,8), %r8  /* Add round constant */
+	leaq    .roundconstants(%rip), %rax
+	xorq    (%rax,%rcx,8), %r8  /* Add round constant */
 	
 	/* Copy state back to XMM */
 	movq  %r15, (%rsp)

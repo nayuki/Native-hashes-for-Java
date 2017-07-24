@@ -1,7 +1,7 @@
 /* 
  * Native hash functions for Java
  * 
- * Copyright (c) Project Nayuki
+ * Copyright (c) Project Nayuki. (MIT License)
  * https://www.nayuki.io/page/native-hash-functions-for-java
  */
 
@@ -20,8 +20,8 @@ md4_compress_block:
 	 *       4  edi       Temporary for calculation per round
 	 *       8  rbp       Base address of block array argument (read-only)
 	 *       8  r8        Base address of state array argument (read-only)
-	 *      16  xmm0      Caller's value of rbx (only lower 64 bits are used)
-	 *      16  xmm1      Caller's value of rbp (only lower 64 bits are used)
+	 *      16  xmm0      Caller's value of rbx (only low 64 bits are used)
+	 *      16  xmm1      Caller's value of rbp (only low 64 bits are used)
 	 */
 	
 	#define ROUND0(a, b, c, d, k, s)  \

@@ -1,7 +1,7 @@
 /* 
  * Native hash functions for Java
  * 
- * Copyright (c) Project Nayuki
+ * Copyright (c) Project Nayuki. (MIT License)
  * https://www.nayuki.io/page/native-hash-functions-for-java
  */
 
@@ -23,11 +23,11 @@ ripemd128_compress_block:
 	 *       4  r8d       Temporary for calculation per round
 	 *       8  rdi       Base address of block array argument (read-only)
 	 *       8  rsi       Base address of state array argument (read-only)
-	 *      16  xmm0      Caller's value of rbx (only lower 64 bits are used)
-	 *      16  xmm1      Caller's value of r10 (only lower 64 bits are used)
-	 *      16  xmm2      Caller's value of r11 (only lower 64 bits are used)
-	 *      16  xmm3      Caller's value of r12 (only lower 64 bits are used)
-	 *      16  xmm4      Caller's value of r13 (only lower 64 bits are used)
+	 *      16  xmm0      Caller's value of rbx (only low 64 bits are used)
+	 *      16  xmm1      Caller's value of r10 (only low 64 bits are used)
+	 *      16  xmm2      Caller's value of r11 (only low 64 bits are used)
+	 *      16  xmm3      Caller's value of r12 (only low 64 bits are used)
+	 *      16  xmm4      Caller's value of r13 (only low 64 bits are used)
 	 */
 	
 	#define ROUND0(a, b, c, d, k, r, s)  \

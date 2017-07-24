@@ -1,9 +1,9 @@
-# 
+#
 # Native hash functions for Java
-# 
-# Copyright (c) Project Nayuki
+#
+# Copyright (c) Project Nayuki. (MIT License)
 # https://www.nayuki.io/page/native-hash-functions-for-java
-# 
+#
 
 # ---- Library Definitions -->
 
@@ -34,14 +34,14 @@ PLATFORM_OS := $(shell echo "$(OS)" | sed -e 's/darwin/osx/g')
 # The filename for the shared library that was created differs based on the
 # platform, so we conditionally set it below.
 ifeq ($(OS), darwin)
-	NATIVE_HASH_LIB := ./libnayuki-native-hashes.dylib
+	LIBFILE := ./libnayuki-native-hashes.dylib
 else ifeq $(OS), sunos)
 	# uname -m doesn't give us a coherent answer for Solaris platforms, so
 	# we have to do an additional inspection to figure out if we are 32/64 bit
 	ARCH := $(shell isainfo -b)
-    NATIVE_HASH_LIB := ./libnayuki-native-hashes.so
+    LIBFILE := ./libnayuki-native-hashes.so
 else
-	NATIVE_HASH_LIB := ./libnayuki-native-hashes.so
+	LIBFILE := ./libnayuki-native-hashes.so
 endif
 
 $(info Detected OS: ${OS}-${ARCH})
@@ -63,8 +63,15 @@ JAVA_INCLUDE_PATH := $(JAVA_HOME)/include
 # Where to find the OS specific headers
 JAVA_NATIVE_INCLUDE_PATH := $(JAVA_INCLUDE_PATH)/$(OS)
 
+CFLAGS += -I /usr/lib/jvm/java-1.8.0-openjdk-amd64/include/
+CFLAGS += -I /usr/lib/jvm/java-1.8.0-openjdk-amd64/include/linux/
+CFLAGS += -Wall
+CFLAGS += -O1
+
+
 # ---- Source files ----
 
+# JNI functions
 SRC_FILENAMES =  \
     md2-jni.c        \
     md4-jni.c        \
@@ -79,6 +86,7 @@ SRC_FILENAMES =  \
     tiger-jni.c      \
     whirlpool-jni.c
 
+# Compression functions for various modes
 ifeq "$(MODE)" "c"
     SRC_FILENAMES += \
         md4-compress.c        \
@@ -113,6 +121,7 @@ else
     $(error Invalid mode "$(MODE)")
 endif
 
+# Compressions functions only available in C
 SRC_FILENAMES += \
     md2-compress.c        \
     ripemd256-compress.c  \
@@ -124,12 +133,11 @@ SRC_FILES = $(foreach name, $(SRC_FILENAMES), native/$(name))
 
 # ---- Rules ----
 
-all: $(NATIVE_HASH_LIB) install-lib java
+all: $(LIBFILE) classes
 
-# Builds the native library
-$(NATIVE_HASH_LIB):
+$(LIBFILE): $(SRC_FILES)
 	mkdir -p out
-	$(CC) -Wall -I $(JAVA_INCLUDE_PATH) -I $(JAVA_NATIVE_INCLUDE_PATH) -shared -fPIC -O1 -o out/$@ $(SRC_FILES)
+	$(CC) -Wall -I $(JAVA_INCLUDE_PATH) -I $(JAVA_NATIVE_INCLUDE_PATH) -shared -fPIC -o out/$@ $(SRC_FILES)
 
 clean:
 	rm -rf out
@@ -144,4 +152,4 @@ install-lib:
 java:
 	JAVA_HOME=$(JAVA_HOME) mvn -q package
 
-.PHONY: $(NATIVE_HASH_LIB) clean
+.PHONY: $(LIBFILE) clean
