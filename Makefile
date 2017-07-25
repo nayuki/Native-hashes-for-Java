@@ -11,6 +11,7 @@
 # Available modes: c, x86, x86-64
 MODE = c
 
+CFLAGS += -std=c99
 CFLAGS += -I /usr/lib/jvm/java-1.8.0-openjdk-amd64/include/
 CFLAGS += -I /usr/lib/jvm/java-1.8.0-openjdk-amd64/include/linux/
 CFLAGS += -Wall
