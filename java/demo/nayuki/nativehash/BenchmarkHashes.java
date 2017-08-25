@@ -68,7 +68,7 @@ public class BenchmarkHashes {
 			for (int i = 0; i < trials; i++) {
 				len = Math.round(len * 1e9 / time);  // Try to target 1.0 second
 				time = getTime(hasher, buffer, len);
-				System.out.printf("%-35s  %12d B  %12d ns  %8.2f MiB/s%n", hasher.getClass().getName(), len, time, len * 1e9 / time / 1048576);
+				System.out.printf("%-35s  %12d B  %12d ns  %8.2f MB/s%n", hasher.getClass().getName(), len, time, len * 1e9 / time / 1e6);
 			}
 			if (trials > 1)
 				System.out.println();
