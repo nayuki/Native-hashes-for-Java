@@ -9,7 +9,7 @@
 #include <jni.h>
 
 
-void sha1_compress_block(const jbyte *block, uint32_t state[5]) {
+void sha1_compress_block(const jbyte block[64], uint32_t state[5]) {
 	#define ROTL32(x, n)  (((0U + (x)) << (n)) | ((x) >> (32 - (n))))  // Assumes that x is uint32_t and 0 < n < 32
 	
 	#define LOADSCHEDULE(i)  \

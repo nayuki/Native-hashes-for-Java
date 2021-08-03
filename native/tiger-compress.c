@@ -278,7 +278,7 @@ static uint64_t T4[256] = {
 };
 
 
-void tiger_compress_block(const jbyte *block, uint64_t state[3]) {
+void tiger_compress_block(const jbyte block[64], uint64_t state[3]) {
 	#define LOADSCHEDULE(i)  \
 		schedule[i] = (uint64_t)(uint8_t)block[i * 8 + 0] <<  0  \
 		            | (uint64_t)(uint8_t)block[i * 8 + 1] <<  8  \
