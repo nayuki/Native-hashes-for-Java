@@ -11,7 +11,7 @@
 
 #define BLOCK_LEN 64
 #define STATE_LEN 64
-extern void whirlpool_compress_block(const jbyte block[static BLOCK_LEN], uint8_t state[static STATE_LEN]);
+extern void whirlpool_compress_block(const jbyte block[restrict static BLOCK_LEN], uint8_t state[restrict static STATE_LEN]);
 
 
 /* 
