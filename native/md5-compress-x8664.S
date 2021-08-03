@@ -6,7 +6,7 @@
  */
 
 
-/* void md5_compress_block(const uint8_t block[64], uint32_t state[4]) */
+/* void md5_compress_block(const uint8_t block[static 64], uint32_t state[static 4]) */
 .globl md5_compress_block
 md5_compress_block:
 	/* 

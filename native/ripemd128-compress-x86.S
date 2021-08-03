@@ -6,7 +6,7 @@
  */
 
 
-/* void ripemd128_compress_block(const uint8_t block[64], uint32_t state[4]) */
+/* void ripemd128_compress_block(const uint8_t block[static 64], uint32_t state[static 4]) */
 .globl ripemd128_compress_block
 ripemd128_compress_block:
 	/* 

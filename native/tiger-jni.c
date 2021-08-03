@@ -11,7 +11,7 @@
 
 #define BLOCK_LEN 64
 #define STATE_LEN 3
-extern void tiger_compress_block(const jbyte block[BLOCK_LEN], uint64_t state[STATE_LEN]);
+extern void tiger_compress_block(const jbyte block[static BLOCK_LEN], uint64_t state[static STATE_LEN]);
 
 
 /* 

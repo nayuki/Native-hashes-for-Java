@@ -6,7 +6,7 @@
  */
 
 
-/* void sha512_compress(const uint8_t block[128], uint64_t state[8]) */
+/* void sha512_compress(const uint8_t block[static 128], uint64_t state[static 8]) */
 .globl sha512_compress
 sha512_compress:
 	/* 

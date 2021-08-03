@@ -12,7 +12,7 @@
 #define BLOCK_LEN 16
 #define STATE_LEN 48
 #define CHECKSUM_LEN 16
-extern void md2_compress_block(const jbyte block[BLOCK_LEN], uint8_t state[STATE_LEN], uint8_t checksum[CHECKSUM_LEN]);
+extern void md2_compress_block(const jbyte block[static BLOCK_LEN], uint8_t state[static STATE_LEN], uint8_t checksum[static CHECKSUM_LEN]);
 
 
 /* 

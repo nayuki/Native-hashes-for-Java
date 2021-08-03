@@ -9,7 +9,7 @@
 #include <jni.h>
 
 
-void ripemd160_compress_block(const jbyte block[64], uint32_t state[5]) {
+void ripemd160_compress_block(const jbyte block[static 64], uint32_t state[static 5]) {
 	#define LOADSCHEDULE(i)  \
 		schedule[i] = (uint32_t)(uint8_t)block[i * 4 + 0] <<  0  \
 		            | (uint32_t)(uint8_t)block[i * 4 + 1] <<  8  \

@@ -10,7 +10,7 @@
 #include <jni.h>
 
 
-static void whirlpool_round(uint64_t block[8], const uint64_t key[8]);
+static void whirlpool_round(uint64_t block[static 8], const uint64_t key[static 8]);
 
 
 static uint64_t ROUND_CONSTANTS[32] = {
@@ -25,7 +25,7 @@ static uint64_t ROUND_CONSTANTS[32] = {
 };
 
 
-void whirlpool_compress_block(const jbyte block[64], uint8_t state[64]) {
+void whirlpool_compress_block(const jbyte block[static 64], uint8_t state[static 64]) {
 	const int NUM_ROUNDS = 10;
 	uint64_t tempState[8];
 	uint64_t tempBlock[8];
@@ -102,7 +102,7 @@ static uint64_t MAGIC_TABLE[256] = {
 };
 
 
-static void whirlpool_round(uint64_t block[8], const uint64_t key[8]) {
+static void whirlpool_round(uint64_t block[static 8], const uint64_t key[static 8]) {
 	uint64_t a = block[0];
 	uint64_t b = block[1];
 	uint64_t c = block[2];

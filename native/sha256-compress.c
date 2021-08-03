@@ -9,7 +9,7 @@
 #include <jni.h>
 
 
-void sha256_compress_block(const jbyte block[64], uint32_t state[8]) {
+void sha256_compress_block(const jbyte block[static 64], uint32_t state[static 8]) {
 	#define ROTR32(x, n)  (((0U + (x)) << (32 - (n))) | ((x) >> (n)))  // Assumes that x is uint32_t and 0 < n < 32
 	
 	#define LOADSCHEDULE(i)  \

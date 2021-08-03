@@ -9,7 +9,7 @@
 #include <jni.h>
 
 
-void sha512_compress_block(const jbyte block[128], uint64_t state[8]) {
+void sha512_compress_block(const jbyte block[static 128], uint64_t state[static 8]) {
 	#define ROTR64(x, n)  (((0U + (x)) << (64 - (n))) | ((x) >> (n)))  // Assumes that x is uint64_t and 0 < n < 64
 	
 	#define LOADSCHEDULE(i)  \

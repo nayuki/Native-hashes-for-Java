@@ -45,7 +45,7 @@ static uint8_t SBOX[256] = {
 };
 
 
-void md2_compress_block(const jbyte block[16], uint8_t state[48], uint8_t checksum[16]) {
+void md2_compress_block(const jbyte block[static 16], uint8_t state[static 48], uint8_t checksum[static 16]) {
 	state[16] = (uint8_t)block[ 0];  state[17] = (uint8_t)block[ 1];  state[18] = (uint8_t)block[ 2];  state[19] = (uint8_t)block[ 3];
 	state[20] = (uint8_t)block[ 4];  state[21] = (uint8_t)block[ 5];  state[22] = (uint8_t)block[ 6];  state[23] = (uint8_t)block[ 7];
 	state[24] = (uint8_t)block[ 8];  state[25] = (uint8_t)block[ 9];  state[26] = (uint8_t)block[10];  state[27] = (uint8_t)block[11];

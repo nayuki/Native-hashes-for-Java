@@ -11,7 +11,7 @@
 
 #define BLOCK_LEN 64
 #define STATE_LEN 5
-extern void sha1_compress_block(const jbyte block[BLOCK_LEN], uint32_t state[STATE_LEN]);
+extern void sha1_compress_block(const jbyte block[static BLOCK_LEN], uint32_t state[static STATE_LEN]);
 
 
 /* 
