@@ -12,7 +12,7 @@ Home page: https://www.nayuki.io/page/native-hash-functions-for-java
 License
 -------
 
-Copyright © 2019 Project Nayuki. (MIT License)
+Copyright © 2021 Project Nayuki. (MIT License)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
