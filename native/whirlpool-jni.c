@@ -9,8 +9,9 @@
 #include <jni.h>
 
 
+#define BLOCK_LEN 64
 #define STATE_LEN 64
-extern void whirlpool_compress_block(const jbyte *block, uint8_t state[STATE_LEN]);
+extern void whirlpool_compress_block(const jbyte block[BLOCK_LEN], uint8_t state[STATE_LEN]);
 
 
 /* 
@@ -37,7 +38,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Whirlpool_compress(JNIEnv *env
 	jbyte *block = theEnv->GetPrimitiveArrayCritical(env, msg, NULL);
 	if (block == NULL)
 		goto cleanup1;
-	for (jint end = off + len; off < end; off += 64)
+	for (jint end = off + len; off < end; off += BLOCK_LEN)
 		whirlpool_compress_block(&block[off], state);
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	

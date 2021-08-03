@@ -9,8 +9,9 @@
 #include <jni.h>
 
 
+#define BLOCK_LEN 64
 #define STATE_LEN 4
-extern void md5_compress_block(const jbyte *block, uint32_t state[STATE_LEN]);
+extern void md5_compress_block(const jbyte block[BLOCK_LEN], uint32_t state[STATE_LEN]);
 
 
 /* 
@@ -37,7 +38,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Md5_compress(JNIEnv *env, jcla
 	jbyte *block = theEnv->GetPrimitiveArrayCritical(env, msg, NULL);
 	if (block == NULL)
 		goto cleanup1;
-	for (jint end = off + len; off < end; off += 64)
+	for (jint end = off + len; off < end; off += BLOCK_LEN)
 		md5_compress_block(&block[off], state);
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	

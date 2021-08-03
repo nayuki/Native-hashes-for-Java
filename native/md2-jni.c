@@ -9,9 +9,10 @@
 #include <jni.h>
 
 
+#define BLOCK_LEN 16
 #define STATE_LEN 48
 #define CHECKSUM_LEN 16
-extern void md2_compress_block(const jbyte *block, uint8_t state[STATE_LEN], uint8_t checksum[CHECKSUM_LEN]);
+extern void md2_compress_block(const jbyte block[BLOCK_LEN], uint8_t state[STATE_LEN], uint8_t checksum[CHECKSUM_LEN]);
 
 
 /* 
@@ -44,7 +45,7 @@ JNIEXPORT jboolean JNICALL Java_nayuki_nativehash_Md2_compress(JNIEnv *env, jcla
 	jbyte *block = theEnv->GetPrimitiveArrayCritical(env, msg, NULL);
 	if (block == NULL)
 		goto cleanup2;
-	for (jint end = off + len; off < end; off += 16)
+	for (jint end = off + len; off < end; off += BLOCK_LEN)
 		md2_compress_block(&block[off], state, checksum);
 	theEnv->ReleasePrimitiveArrayCritical(env, msg, block, JNI_ABORT);
 	
