@@ -6,7 +6,7 @@
  */
 
 
-/* void sha256_compress_block(const uint8_t block[static 64], uint32_t state[static 8]) */
+/* void sha256_compress_block(const int8_t block[static 64], uint32_t state[static 8]) */
 .globl sha256_compress_block
 sha256_compress_block:
 	/* 

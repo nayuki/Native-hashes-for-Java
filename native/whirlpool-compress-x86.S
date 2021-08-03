@@ -6,7 +6,7 @@
  */
 
 
-/* void whirlpool_compress_block(const uint8_t block[restrict static 64], uint8_t state[restrict static 64]) */
+/* void whirlpool_compress_block(const int8_t block[restrict static 64], uint8_t state[restrict static 64]) */
 /* state and block can be optionally aligned to 8 bytes for slightly better performance. */
 .globl whirlpool_compress_block
 whirlpool_compress_block:

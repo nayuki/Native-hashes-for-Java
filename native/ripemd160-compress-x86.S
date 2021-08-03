@@ -6,7 +6,7 @@
  */
 
 
-/* void ripemd160_compress_block(const uint8_t block[static 64], uint32_t state[static 5]) */
+/* void ripemd160_compress_block(const int8_t block[static 64], uint32_t state[static 5]) */
 .globl ripemd160_compress_block
 ripemd160_compress_block:
 	/* 
